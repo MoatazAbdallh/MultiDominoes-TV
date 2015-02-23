@@ -8,6 +8,7 @@
 
         //set application's global Main variable's controller to this controller
         $scope.playersLength = 0;
+		$scope.scoreSheet = [];
         var TAG = "Controller - MainController",
 			_THIS = this;
         Main.mainController = _THIS;

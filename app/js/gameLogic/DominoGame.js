@@ -1,29 +1,29 @@
 /**
-* Domino Game
-* Author Paul Allen http://paulallen.com.jm
-* Copyright 2011, Paul Allen
-* Licensed under the MIT or GPL Version 2 licenses.
-* Date: November 15 2011
-*
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software to deal in the Software without
-* restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*/
+ * Domino Game
+ * Author Paul Allen http://paulallen.com.jm
+ * Copyright 2011, Paul Allen
+ * Licensed under the MIT or GPL Version 2 licenses.
+ * Date: November 15 2011
+ *
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software to deal in the Software without
+ * restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 
 (function (window, undefined) {
@@ -57,7 +57,8 @@
         var temp = null;
         for (i = 0; i < 28; i++) {
             r = Math.floor(Math.random() * 28);
-            temp = this.deck[r]; this.deck[r] = this.deck[i];
+            temp = this.deck[r];
+            this.deck[r] = this.deck[i];
             this.deck[i] = temp;
         }
     }
@@ -79,7 +80,7 @@
 
     DominoGame.prototype.whichPlayer = function () {
         if (this.currentPlayer == null) {
-            for (var i = 6 ; i >= 0 ; i--) //looking for the biggest number
+            for (var i = 6; i >= 0; i--) //looking for the biggest number
             {
                 this.firstcard = new DominoGame.Domino(i, i);
                 for (var j = 0; j < this.playersLength; j++) {
@@ -98,7 +99,7 @@
     DominoGame.prototype.chooseNextPlayer = function () {
         if (this.playstack.length == 0) return this.whichPlayer();
         var startingPos = this.currentPlayer;
-        for (var i = (this.currentPlayer + 1) % this.playersLength; i != startingPos ; i = (i + 1) % this.playersLength) {
+        for (var i = (this.currentPlayer + 1) % this.playersLength; i != startingPos; i = (i + 1) % this.playersLength) {
             if (this.players[i].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right())) {
                 this.currentPlayer = i;
                 console.log("The next player Index is" + this.currentPlayer);
@@ -111,8 +112,10 @@
     DominoGame.prototype.makePlay = function (player, cardz, side) {
         console.log("Domino Game makePlay Fn.");
 
-        if (player !== this.currentPlayer) { return false; }
-       var card = new DominoGame.Domino(cardz.l, cardz.r);
+        if (player !== this.currentPlayer) {
+            return false;
+        }
+        var card = new DominoGame.Domino(cardz.l, cardz.r);
 
         console.log("Play Stack Length " + this.playstack.length);
         console.log("Card Side " + side);
@@ -123,7 +126,7 @@
                 this.playstack.push(card);
 
             else
-                //i need to send the firstcard
+            //i need to send the firstcard
                 return false;
         }
         else {
@@ -164,10 +167,10 @@
             }
         }
 
-        this.players[player].makePlay(card.left(),card.right());
+        this.players[player].makePlay(card.left(), card.right());
 
-        if (this.whoWon() == -1)
-            this.chooseNextPlayer();
+        //if (this.whoWon() == -1)
+        //  this.chooseNextPlayer();
         return true;
     }
 
@@ -184,7 +187,9 @@
     DominoGame.prototype.gameCanPlay = function () {
         console.log("Domino Game gameCanPlay Fn.");
         var canPlay = false;
-        if (this.playstack.length === 0) { return true; }
+        if (this.playstack.length === 0) {
+            return true;
+        }
         var startingPos = this.currentPlayer;
         for (var i = 0; i < this.playersLength; i++) {
             if (this.players[i].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right())) {
@@ -195,42 +200,118 @@
         return canPlay;
     }
 
-    DominoGame.prototype.whoWon = function () {
+    /* DominoGame.prototype.whoWon = function () {
+     var startingPos = this.currentPlayer;
+     var length = this.players.length;
+     for (var i = startingPos; (i + 1) % length != startingPos ; i = (i + 1) % length) {
+     if (this.players[i].cards.length == 0) {
+     return i;
+     }
+     }
+
+     if (this.gameCanPlay() == false) {
+
+     console.log("game blocked");
+     _lowest = 0;
+     _hands = [];
+     _hands.push(this.players[0].countHand());
+     _occurrences = 1;
+
+     for (var i = 1, length = this.players.length; i < length; i++) {
+     _hands.push(this.players[i].countHand());
+     if (_hands[_lowest] > _hands[i]) {
+     _lowest = i;
+     _occurrences = 1;
+     }
+
+     if (_hands[_lowest] == _hands[i]) {
+     _occurrences += 1;
+     }
+
+     }
+
+     if (_occurrences == 1)
+     return _lowest;
+     }
+
+     return -1;
+     }*/
+
+    DominoGame.prototype.calScore = function () {
+        var playersLns = this.players.length;
         var startingPos = this.currentPlayer;
-        var length = this.players.length;
-        for (var i = startingPos; (i + 1) % length != startingPos ; i = (i + 1) % length) {
-            if (this.players[i].cards.length == 0) {
-                return i;
+        var score = 0;
+        if (this.players[this.currentPlayer].cards.length === 0) {
+            for (var i = (startingPos + 1) % playersLns; (i + 1) % playersLns != startingPos; i = (i + 1) % playersLns) {
+                PlayerScore.score += this.players[i].countHand();
             }
+            PlayerScore.player = this.currentPlayer;
+            return PlayerScore;
+
         }
-
-        if (this.gameCanPlay() == false) {
-
-            console.log("game blocked");
+        else {
             _lowest = 0;
             _hands = [];
-            _hands.push(this.players[0].countHand());
-            _occurrences = 1;
+            _commonPlayers = [];
+            _totalCards = 0;
+            _playerCount = this.players[0].countHand();
+            _totalCards += _playerCount;
+            _hands.push(_playerCount);
+            for (var j = 1; j < playersLns; j++) {
+                _playerCount = this.players[j].countHand();
 
-            for (var i = 1, length = this.players.length; i < length; i++) {
-                _hands.push(this.players[i].countHand());
-                if (_hands[_lowest] > _hands[i]) {
-                    _lowest = i;
+                _totalCards += _playerCount;
+                _hands.push(_playerCount);
+
+                if (_hands[_lowest] > _hands[j]) {
+                    _lowest = j;
                     _occurrences = 1;
-                }
+                    // _commonPlayers.push(_lowest);
 
-                if (_hands[_lowest] == _hands[i]) {
+                }
+                //still looking for a better solution in the case of a tie
+                else if (_hands[_lowest] == _hands[j]) {
+                    _commonPlayers.push(j);
+                    _commonPlayers.push(_lowest);
                     _occurrences += 1;
                 }
 
             }
 
-            if (_occurrences == 1)
-                return _lowest;
-        }
+            if (_occurrences == 1) {
+                PlayerScore.score = _totalCards - this.players[_lowest].countHand();
+                PlayerScore.player = _lowest;
+                return PlayerScore;
+            }
+            else {
+                _lowest = 0;
+                PlayersCard = [];
+                PlayersCard[_lowest] = this.players[_commonPlayers[_lowest]].getSmallestCard();
+                for (var k = 1; k < _occurrences; k++) {
+                    PlayersCard[k] = this.players[_commonPlayers[k]].getSmallestCard();
+                    if (PlayersCard[_lowest].left() + PlayersCard[_lowest].right() > PlayersCard[k].left() + PlayersCard[k].right())
+                        _lowest = k;
+                    else if (PlayersCard[_lowest].left() + PlayersCard[_lowest].right() == PlayersCard[k].left() + PlayersCard[k].right())
+                        if (Math.abs(PlayersCard[_lowest].left() - PlayersCard[_lowest].right()) > Math.abs(PlayersCard[k].left() - PlayersCard[k].right()))
+                            _lowest = k;
+                }
 
-        return -1;
-    }
+                var startPos = commonPlayers[_lowest];
+                score = 0;
+                _totalCards = 0;
+                for (var m = (startPos + 1) % playersLns; (m + 1) % playersLns != startPos; m = (m + 1) % playersLns) {
+                    _totalCards += this.players[m].countHand();
+
+
+                }
+                PlayerScore.score = _totalCards - this.players[startPos].countHand();
+                PlayerScore.player = startPos;
+                return PlayerScore;
+
+            }
+        }
+    };
+
 
     /*!
      * Domino 
@@ -247,22 +328,37 @@
         this.r = ri;
 
 
-
     }
-    DominoGame.Domino.prototype.left = function () { return this.l; }
-    DominoGame.Domino.prototype.right = function () { return this.r; }
-    DominoGame.Domino.prototype.orientation = function () { return 1; }
+    DominoGame.Domino.prototype.left = function () {
+        return this.l;
+    }
+    DominoGame.Domino.prototype.right = function () {
+        return this.r;
+    }
+    DominoGame.Domino.prototype.orientation = function () {
+        return 1;
+    }
     DominoGame.Domino.prototype.flip = function () {
         or = this.orientation();
         if (or > 0) { //or > 0 is normal orientation so flip now
-            this.left = function () { return this.r; }
-            this.right = function () { return this.l; }
+            this.left = function () {
+                return this.r;
+            }
+            this.right = function () {
+                return this.l;
+            }
         } else {
-            this.left = function () { return this.l; }
-            this.right = function () { return this.r; }
+            this.left = function () {
+                return this.l;
+            }
+            this.right = function () {
+                return this.r;
+            }
         }
 
-        this.orientation = function () { return or * -1; }
+        this.orientation = function () {
+            return or * -1;
+        }
     }
 
     DominoGame.Domino.prototype.equals = function (left, right) {
@@ -277,9 +373,8 @@
                     return true;
             }
         }
-        else
-            if (this.left() == left && this.right() == right)
-                return true;
+        else if (this.left() == left && this.right() == right)
+            return true;
         return false;
     }
     DominoGame.Domino.prototype.canMatch = function (left, right) {
@@ -301,10 +396,10 @@
 
     /*!
 
-    Player Object
+     Player Object
 
-    */
-    function Player( id,  name,cards) {
+     */
+    function Player(id, name, cards) {
         this.id = id;
         this.name = name || "Player " + this.id;
         this.cards = cards;
