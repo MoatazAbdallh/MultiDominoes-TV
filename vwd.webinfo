@@ -1,0 +1,10 @@
+﻿<?xml version="1.0"?>
+<!-- 
+  Visual Studio global web project settings.
+-->
+<VisualWebDeveloper>
+
+  <Globals>
+    <UserProperties appConfig_1json__JSONSchema="http://json-schema.org/address"/>
+  </Globals>
+</VisualWebDeveloper>

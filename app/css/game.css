@@ -1,0 +1,55 @@
+﻿#gameView {
+    width: 1280px;
+    height: 720px;
+    background-image: url('../images/Game-Back.png');
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.scoresheet{
+    position:absolute;
+    top:100px;
+    left:5px;
+    width:245px;
+    color:#fff;
+}
+.scoreheader{
+    font-size:20px;
+    font-weight:bold;
+}
+.col-50,.col-33{
+    border:2px solid #fff !important;
+    padding:10px;
+}
+.col-33{
+    flex: 0 0 48.3333% !important;
+max-width: 48.3333% !important;
+
+}
+.col-50{
+    flex: 0 0 48.3333% !important;
+max-width: 48.3333% !important;
+
+}
+.playstack{
+    position:relative;
+    left:280px;
+    top:250px;
+    width:950px;
+    text-align:center;
+}
+.playstack img{
+    display:inline
+}
+.margingright{
+    margin-left:49px !important;
+}
+.margingleft{
+    margin-right:49px !important;
+}
+/*rotation*/
+.r45            { -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); }
+.r90            { -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg);margin-left:39px;margin-right:39px}
+.r180           { -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg);}
+.r270           { -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg);margin-left:39px;margin-right:39px}

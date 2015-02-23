@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html ng-app="MultiDominoes">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Multi Dominoes</title>
+
+    <!--Style Sheet-->
+    <!-- Smart TV Common API -->
+    <script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Widget.js"></script>
+    <script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></script>
+    <script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/Plugin.js'></script>
+    <script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/PluginTV.js'></script>
+    <!-- End - Smart TV Common API -->
+    <!--Core Library-->
+    <script src="app/js/gameLogic/DominoGame.js"></script>
+    <script src="app/js/libs/underscore.min.js"></script>
+    <script type="text/javascript" language="javascript" src="app/js/libs/jquery.min.js"></script>
+    <script src="app/js/libs/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="app/js/libs/ionic/js/ionic.bundle.js"></script>
+    <script src="app/js/libs/multiscreen-smarttv-1.1.18.min.js"></script>
+    <link href="app/js/libs/ionic/css/ionic.min.css" rel="stylesheet" />
+
+    <!--End - Core Library-->
+    <!--Production App JS------------------------------------------------------------------------------------>
+    <!--App Core-->
+    <script type="text/javascript" src="app/js/Main.js"></script>
+    <script type="text/javascript" src="app/js/app.js"></script>
+    <!--End - App Core-->
+    <!--Production App JS-->
+    <script type="text/javascript" src="app/js/configuration/ConfigData.js"></script>
+    <script type="text/javascript" src="app/js/controllers/controllers.js"></script>
+    <script type="text/javascript" src="app/js/directives/directives.js"></script>
+    <script type="text/javascript" src="app/js/services/services.js"></script>
+    <script type="text/javascript" src="app/js/utils/Utils.js"></script>
+    <script type="text/javascript" src="app/js/controllers/menuController.js"></script>
+    <script type="text/javascript" src="app/js/controllers/mainController.js"></script>
+    <script type="text/javascript" src="app/js/controllers/waitingController.js"></script>
+    <script src="app/js/controllers/gameController.js"></script>
+    <!--End - Production App JS------------------------------------------------------------------------------------>
+    <link rel="stylesheet" href="app/css/Main.css" type="text/css">
+
+</head>
+
+<body id="AppBody" ng-controller="mainController"
+      onload="Main.onLoad();" onunload="Main.onUnload();">
+
+    <a href="javascript:void(0);" id="anchor_main" onkeydown="Main.keyDown();"></a>
+    <div ui-view></div>
+</body>
+</html>

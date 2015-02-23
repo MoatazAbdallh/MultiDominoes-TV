@@ -1,0 +1,18 @@
+﻿<link href="app/css/game.css" rel="stylesheet" />
+<div id="gameView">
+    <div class="scoresheet">
+        <div class="row scoreheader">
+            <div class="col-50">Name</div>
+            <div class="col-33">Score</div>
+        </div>
+        <div class="row" data-ng-repeat="player in DominoGame.players">
+            <div class="col-50" data-ng-bind="player.name"></div>
+            <div class="col-33"></div>
+        </div>
+    </div>
+    <div class="playstack">
+        <img data-ng-repeat="card in leftStack" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack',$index)" />
+        <img class="firstcard" data-ng-show="DominoGame.playstack.length>0" src="{{'app/images/cards/'+DominoGame.playstack[DominoGame.firstCardIndex].right()+DominoGame.playstack[DominoGame.firstCardIndex].left()+'.png'}}" />
+        <img data-ng-repeat="card in rightStack" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'rightStack',$index)"/>
+    </div>
+</div>

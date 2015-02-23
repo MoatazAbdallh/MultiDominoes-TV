@@ -1,0 +1,12 @@
+﻿<link href="app/css/waiting.css" rel="stylesheet" />
+<div id="waitingView">
+    <div class="row logo"></div>
+    <div class="row" style="margin-top:4%;margin-left: 40%;" data-ng-class="playersLength>1 ? 'startHL':'start'" data-ng-click="start()">
+    </div>
+    <div class="row" style="margin-top:2%;margin-left: 40%;text-align:center;font-size:16px" data-ng-show="playersLength==1" >
+        Waiting for other players to be connected
+    </div>
+    <div class="list" style="margin-top:2%;margin-left: 36%;text-align:center;width:35%" >
+        <div class="item animate" data-ng-repeat="client in clients" style="background-color:transparent !important;color:#fff !important;font-size:20px;font-weight:bold;-webkit-border-radius:5px !important;">{{client.attributes.name}} has been connected successfully....</div>
+    </div>
+</div>
