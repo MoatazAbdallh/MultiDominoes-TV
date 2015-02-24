@@ -466,6 +466,26 @@
         return count;
     }
 
+    Player.prototype.getSmallestCard = function () {
+
+        var totalCards = this.cards.length;
+        var smallestCard = this.cards[0].left() + this.cards[0].right();
+        var cardindex = 0;
+        for (var i = 1; i < totalCards; i++) {
+            if (smallestCard > this.cards[i].left() + this.cards[i].right()) {
+                smallestCard = this.cards[i].left() + this.cards[i].right();
+                cardindex = i;
+            }
+            else if (smallestCard == this.cards[i].left() + this.cards[i].right()) // if same
+            {
+                // here, the magnitude subtraction of the smallest
+                if (Math.abs(this.cards[i].left() - this.cards[i].right()) < Math.abs(this.cards[cardindex].left() - this.cards[cardindex].right()))
+                    cardindex = i;
+            }
+        }
+        return  this.cards[cardindex];
+    }
+
     //expose game
     window.Game = DominoGame;
 
