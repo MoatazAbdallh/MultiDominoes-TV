@@ -97,12 +97,13 @@
     }
     //internal function: called with .call or .apply
     DominoGame.prototype.chooseNextPlayer = function () {
+        alert("Choose Next Player Fn.");
         if (this.playstack.length == 0) return this.whichPlayer();
         var startingPos = this.currentPlayer;
         for (var i = (this.currentPlayer + 1) % this.playersLength; i != startingPos; i = (i + 1) % this.playersLength) {
             if (this.players[i].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right())) {
                 this.currentPlayer = i;
-                console.log("The next player Index is" + this.currentPlayer);
+                alert("The next player Index is" + this.currentPlayer);
                 break;
             }
         }
@@ -110,15 +111,12 @@
     }
 
     DominoGame.prototype.makePlay = function (player, cardz, side) {
-        console.log("Domino Game makePlay Fn.");
+        alert("Domino Game makePlay Fn.");
 
-        if (player !== this.currentPlayer) {
-            return false;
-        }
         var card = new DominoGame.Domino(cardz.l, cardz.r);
 
-        console.log("Play Stack Length " + this.playstack.length);
-        console.log("Card Side " + side);
+       alert("Play Stack Length " + this.playstack.length);
+        alert("Card Side " + side);
 
         // quite confused ,may be the played card isn't the greatest one, why should i add it to the stack before checking???? 
         if (this.playstack.length === 0) {
@@ -167,7 +165,7 @@
             }
         }
 
-        this.players[player].makePlay(card.left(), card.right());
+        this.players[player].makePlay(card);
 
         //if (this.whoWon() == -1)
         //  this.chooseNextPlayer();
@@ -378,13 +376,15 @@
         return false;
     }
     DominoGame.Domino.prototype.canMatch = function (left, right) {
+        alert("CanMatch Fn.")
+        alert("StackLeft " + left + " Stackright " + right);
+        alert("card left "+this.left()+" card right"+ this.right())
         l = this.left();
         r = this.right();
         if (l == left) return 1;
-        if (l == right) return 2;
-        if (r == left) return 3;
-        if (r == right) return 4;
-        return 0;
+        if (r == left) return 2;
+        if (r == right) return 3;
+        return false;
     }
 
     DominoGame.Domino.prototype.newId = function () {
@@ -407,8 +407,7 @@
 
     Player.prototype.canPlay = function (left, right) {
         alert("Player CanPlay() Fn.")
-        var count = this.cards.length;
-        for (i = 0; i < count; i++) {
+        for (i = 0; i < this.cards.length; i++) {
             if (this.cards[i].canMatch(left, right)) {
                 return true;
             }
@@ -434,12 +433,15 @@
         return canplay;
     }
 
-    Player.prototype.makePlay = function (left, right) {
+    Player.prototype.makePlay = function (left, right) { //left means card & right is null
+        alert("makePlay Fn.")
         var length = this.cards.length;
         for (var i = 0; i < length; i++) {
             if (this.cards[i].equals(left, right)) {
                 this.cards.splice(i, 1);
-                console.log("Player " + this.id + " plays: " + left + " " + right);
+                alert("Player Cards Length "+this.cards.length);
+                alert("Player Cards: "+JSON.stringify(this.cards))
+                console.log("Player " + this.id + " plays: " + left.left() + " " + left.right());
                 break;
             }
         }
@@ -456,13 +458,14 @@
         return false;
     }
 
-    Player.prototype.countHand = function () {
-        var length = this.cards.length;
-        if (length == 0) return 0;
+    Player.prototype.countHand = function () { //This function to count the total of cards in hands
+        alert("Count Hand Fn.");
+        alert("Cards Length:" + this.cards.length);
         var count = 0;
-        for (i = 0; i < length; i++) {
+        if (this.cards.length == 0) return 0;
+        $.each(this.cards, function (i, card) {
             count += card.left() + card.right();
-        }
+        })
         return count;
     }
 
