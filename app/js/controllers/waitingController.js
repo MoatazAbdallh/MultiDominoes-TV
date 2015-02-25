@@ -6,7 +6,7 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
         Utils.log("Intializing", TAG);
         $rootScope.setControllerFocus(_THIS);
 
-        $scope.start = function () {
+        $rootScope.start = function () {
             $rootScope.DominoGame = new window.Game();
             $rootScope.DominoGame.playersLength = $scope.playersLength;
             $rootScope.DominoGame.shuffle();
