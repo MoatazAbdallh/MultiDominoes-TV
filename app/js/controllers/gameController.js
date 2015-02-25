@@ -33,8 +33,10 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             if (!$rootScope.DominoGame.makePlay($scope.idx, $scope.playedcard, $scope.side)) {
                 if ($rootScope.DominoGame.players[$rootScope.DominoGame.currentPlayer].canPlay($rootScope.DominoGame.playstack[0].left(), $rootScope.DominoGame.playstack[$rootScope.DominoGame.playstack.length - 1].right())) //if player esta3bat we rama false card
                     client.send(JSON.stringify({ type: "message", content: "Please Choose another Card!" }), true);
-                else if ($rootScope.DominoGame.remaningCards.length > 0) //if player hasn't cards to play
+                else if ($rootScope.DominoGame.remaningCards.length > 0) { //if player hasn't cards to play
+                    Utils.log("sending drawcard event to mobile ", TAG);
                     client.send(JSON.stringify({ type: "drawCard", flag: true }), true);
+                }
                 else { //he draw until vanish remaningCards Arr.
                     $rootScope.DominoGame.chooseNextPlayer();
                     $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
