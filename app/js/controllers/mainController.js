@@ -23,13 +23,14 @@
             $scope.connectToChannel();
         }
         $scope.connectToChannel = function () {
+            Utils.log("Open Channel : ", TAG);
             $scope.device.openChannel($scope.channelId, { name: "Host" }, $scope.onConnect, function (error) {
                 Utils.log("device.openChannel() Error : " + error, TAG);
             });
         };
         $scope.onConnect = function (channel) {
             $scope.channel = channel;
-            Utils.log("onConnect: " + arguments, TAG);
+            Utils.log("onConnect: " + JSON.stringify(channel), TAG);
 
             // Wire up some event handlers
             $scope.channel.on("disconnect", function (client) {
@@ -41,10 +42,19 @@
                 $scope.playersLength++;
                 $rootScope.safeApply($scope);
                 $scope.onClientConnect(client);
+                if ($scope.playersLength > 4) //in case we have reached max number of players
+                    client.send(JSON.stringify({ type: "message", content: "Sorry we have reached max. number of players" }), true);
                 if ($scope.playersLength == 1)
                     $state.go('waiting');
+                if($scope.playersLength>=2) //in case we are ready for play we send broadcast message to all players
+                    $scope.channel.broadcast(JSON.stringify({ type: "readyToPlay", flag:true }), true);
             });
-
+            $scope.channel.on("message", function (msg, client) {
+                $scope.data = JSON.parse(msg);
+                //In case the start button has been clicked from mobile side
+                if ($scope.data.type == "startPlay" && $scope.data.flag==true)
+                    $rootScope.start();
+            });
             $scope.channel.on("clientDisconnect", function (client) {
                 Utils.log("Client: " + client.attributes.name + " has been disconnected", TAG);
             });
@@ -55,7 +65,8 @@
             var msg = {
                 type: "connection",
                 flag: true,
-                message: "" + client.attributes.name + " Connected Successfully"
+                message: "" + client.attributes.name + " Connected Successfully",
+                playerslength: $scope.playersLength
             };
             $scope.channel.broadcast(JSON.stringify(msg));
         }
