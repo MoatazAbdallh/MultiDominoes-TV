@@ -17,6 +17,7 @@
         $scope.ms = window.webapis.multiscreen;
         $scope.clients = [];
 
+        
 
         $scope.onDeviceRetrieved = function (device) {
             Utils.log("Success Retrieved Device ", TAG);
@@ -31,7 +32,7 @@
         };
         $scope.onConnect = function (channel) {
             $scope.channel = channel;
-            Utils.log("onConnect: " + JSON.stringify(channel), TAG);
+            Utils.log("onConnect: ", TAG);
 
             // Wire up some event handlers
             $scope.channel.on("disconnect", function (client) {
@@ -39,6 +40,7 @@
             });
 
             $scope.channel.on("clientConnect", function (client) {
+                if(!$rootScope.gameStartedFlag){ //in case we don't start game so accept any client request
                 $scope.clients.push(client);
                 $scope.playersLength++;
                 $rootScope.safeApply($scope);
@@ -47,20 +49,23 @@
                     client.send(JSON.stringify({ type: "message", content: "Sorry we have reached max. number of players" }), true);
                 if ($scope.playersLength == 1)
                     $state.go('waiting');
-                if($scope.playersLength>=2) //in case we are ready for play we send broadcast message to all players
-                    $scope.channel.broadcast(JSON.stringify({ type: "readyToPlay", flag:true }), true);
+                if ($scope.playersLength >= 2) //in case we are ready for play we send broadcast message to all players
+                    $scope.channel.broadcast(JSON.stringify({ type: "readyToPlay", flag: true }), true);
+                }
+                else
+                    client.send(JSON.stringify({ type: "message", content: "Sorry Game has been started, you can join in the next session" }), true);
             });
             $scope.channel.on("message", function (msg, client) {
                 $scope.data = JSON.parse(msg);
                 //In case the start button has been clicked from mobile side
-                if ($scope.data.type == "startPlay" && $scope.data.flag==true)
+                if ($scope.data.type == "startPlay" && $scope.data.flag == true)
                     $rootScope.start();
             });
             $scope.channel.on("clientDisconnect", function (client) {
                 Utils.log("Client: " + client.attributes.name + " has been disconnected", TAG);
             });
 
-            
+
         };
         $scope.onClientConnect = function (client) {
             var msg = {
