@@ -14,6 +14,8 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
             $.each($scope.clients, function (i, client) {
                 $rootScope.DominoGame.players[i].name = client.attributes.name;
                 $rootScope.DominoGame.players[i].type = "cards";
+            //init score
+            $scope.scoreSheet.push({"name": client.attributes.name, "score": 0});
                 client.send(JSON.stringify($rootScope.DominoGame.players[i]), true);
             });
             $state.go('game');
@@ -21,7 +23,7 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
         }
 
         this.handleKeyDown = function (keyCode) {
-            Utils.log("handleKeyDown(" + keyCode + ")",TAG);
+        Utils.log("handleKeyDown(" + keyCode + ")", TAG);
             switch (keyCode) {
                 case tvKey.KEY_UP:
                     break;
