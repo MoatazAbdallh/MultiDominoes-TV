@@ -33,14 +33,27 @@ max-width: 48.3333% !important;
 
 }
 .playstack{
-    position:relative;
-    left:280px;
-    top:250px;
     width:950px;
-    text-align:center;
 }
 .playstack img{
     display:inline
+}
+.centerStack{
+    position:absolute;
+    top:250px;
+    left:600px;
+}
+.leftStack{
+    position:absolute;
+    top:250px;
+}
+.rightStack{
+    position:absolute;
+    top:250px;
+    left:688px;
+}
+.leftStackRow{
+    top:270px
 }
 .margingright{
     margin-left:49px !important;
@@ -48,8 +61,16 @@ max-width: 48.3333% !important;
 .margingleft{
     margin-right:49px !important;
 }
+.mgright180{
+    margin-left:5px
+}
+.mgleft180{
+    margin-right:-5px
+}
 /*rotation*/
+.r0            { -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }
 .r45            { -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); }
 .r90            { -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg);margin-left:39px;margin-right:39px}
 .r180           { -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg);}
 .r270           { -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg);margin-left:39px;margin-right:39px}
+.r360           { -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg)}

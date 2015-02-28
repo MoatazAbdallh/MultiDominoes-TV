@@ -135,11 +135,15 @@
                     card.or = 'r90'
                     this.playstack.unshift(card);
                     this.firstCardIndex++;
+                    if(this.leftStackEdgeFlag); //Add this line)
+                    this.leftStackEdgeIndex++;
                 }
                 else if (c == card.right()) {
                     card.or = 'r270'
                     this.playstack.unshift(card);
                     this.firstCardIndex++;
+                    if (this.leftStackEdgeFlag)
+                        this.leftStackEdgeIndex++;
                 }
                 else {
                     alert("False Card");
