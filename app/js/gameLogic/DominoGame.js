@@ -137,6 +137,8 @@
                     this.firstCardIndex++;
                     if(this.leftStackEdgeFlag); //Add this line)
                     this.leftStackEdgeIndex++;
+                    if (this.rightStackEdgeFlag)
+                        this.rightStackEdgeFlag++;
                 }
                 else if (c == card.right()) {
                     card.or = 'r270'
@@ -144,6 +146,8 @@
                     this.firstCardIndex++;
                     if (this.leftStackEdgeFlag)
                         this.leftStackEdgeIndex++;
+                    if (this.rightStackEdgeFlag)
+                        this.rightStackEdgeFlag++;
                 }
                 else {
                     alert("False Card");

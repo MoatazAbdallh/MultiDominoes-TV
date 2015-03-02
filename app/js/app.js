@@ -31,6 +31,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         templateUrl: 'app/views/game.html',
         controller: 'gameController'
     })
+    .state('test', {
+        url: '/test',
+        templateUrl: 'app/views/test.html',
+        controller: 'testController'
+    })
 })
 
 /**

@@ -14,13 +14,17 @@
         <div class="leftStack"  ng-style="{'left':leftStackPos+'px'}">
             <img data-ng-repeat="card in leftStack" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack',$index)" />
          </div>
-        <img data-ng-show="leftStackEdge" src="{{'app/images/cards/'+leftStackEdge.r+leftStackEdge.l+'.png'}}" ng-class="leftStackEdgeOrientation(leftStackEdge)" style="position:absolute" ng-style="leftStackEdgeStyle()">
-        <div style="position:absolute" ng-style="leftStackRowStyle()">
+        <img data-ng-show="leftStackEdge" src="{{'app/images/cards/'+leftStackEdge.r+leftStackEdge.l+'.png'}}" ng-class="EdgeOrientation(leftStackEdge)" style="position:absolute" ng-style="StackEdgeStyle('left')">
+        <div style="position:absolute" ng-style="stackRowStyle('left')">
             <img data-ng-repeat="card in leftStackRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack1',$index)" />
         </div>
         <img class="centerStack" data-ng-show="DominoGame.playstack.length>0" src="{{'app/images/cards/'+DominoGame.playstack[DominoGame.firstCardIndex].right()+DominoGame.playstack[DominoGame.firstCardIndex].left()+'.png'}}" />
         <div class="rightStack">
             <img data-ng-repeat="card in rightStack" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'rightStack',$index)" />
+        </div>
+        <img data-ng-show="rightStackEdge" src="{{'app/images/cards/'+rightStackEdge.r+rightStackEdge.l+'.png'}}" ng-class="EdgeOrientation(rightStackEdge)" style="position:absolute" ng-style="StackEdgeStyle('right')">
+        <div style="position:absolute;direction:rtl" ng-style="stackRowStyle('right')">
+            <img data-ng-repeat="card in rightStackRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack1',$index)" />
         </div>
     </div>
 </div>

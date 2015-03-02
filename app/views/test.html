@@ -1,0 +1,35 @@
+﻿<link href="app/css/game.css" rel="stylesheet" />
+<div id="gameView">
+    <!--<div class="scoresheet">
+        <div class="row scoreheader">
+            <div class="col-50">Name</div>
+            <div class="col-33">Score</div>
+        </div>
+        <div class="row" data-ng-repeat="player in DominoGame.players">
+            <div class="col-50" data-ng-bind="player.name"></div>
+            <div class="col-33"></div>
+        </div>
+    </div>-->
+    <div class="playstack">
+        <!--<div class="leftStack"  ng-style="{'left':leftStackPos+'px'}">
+            <img data-ng-repeat="card in leftStack" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack',$index)" />
+         </div>
+        <img data-ng-show="leftStackEdge" src="{{'app/images/cards/'+leftStackEdge.r+leftStackEdge.l+'.png'}}" ng-class="leftStackEdgeOrientation(leftStackEdge)" style="position:absolute" ng-style="leftStackEdgeStyle()">
+        <div style="position:absolute" ng-style="leftStackRowStyle()">
+            <img data-ng-repeat="card in leftStackRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack1',$index)" />
+        </div>-->
+        <div style="position:absolute;top:250px;left:70px">
+            <img  src="app/images/cards/43.png" class="r270" />
+            <img  src="app/images/cards/31.png" class="r270" />
+            <img  src="app/images/cards/61.png" class="r270" />
+
+        </div>
+        <img class="centerStack"  src="app/images/cards/66.png" />
+        <div class="rightStack">
+            <img  src="app/images/cards/65.png" class="r90" />
+            <img  src="app/images/cards/51.png" class="r90" />
+            <img  src="app/images/cards/11.png" class="r180" />
+
+        </div>
+    </div>
+</div>
