@@ -6,7 +6,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     Utils.log("Intializing", TAG);
     $rootScope.setControllerFocus(_THIS);
 
-    $scope.firstPlayer = $rootScope.DominoGame.chooseNextPlayer();
+    $scope.firstPlayer = $rootScope.DominoGame.whichPlayer();
     Utils.log($scope.firstPlayer, "First Player Index");
     $scope.clients[$scope.firstPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
     $.each($scope.clients, function (i, client) {
@@ -31,97 +31,89 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
 
             //In case the player play a false one, i will activate the draw button whatever cards or choose to draw.
             if (!$rootScope.DominoGame.makePlay($scope.idx, $scope.playedcard, $scope.side)) {
-                //  if ($rootScope.DominoGame.players[$rootScope.DominoGame.currentPlayer].canPlay($rootScope.DominoGame.playstack[0].left(), $rootScope.DominoGame.playstack[$rootScope.DominoGame.playstack.length - 1].right())) //if player esta3bat we rama false card
                 client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose another Card!", card: $scope.playedcard }), true);
-                // else if ($rootScope.DominoGame.remaningCards.length > 0) { //if player hasn't cards to play*/
-                Utils.log("sending drawcard event to mobile ", TAG);
-                client.send(JSON.stringify({ type: "drawCard", flag: true }), true);
             }
-            if ($rootScope.DominoGame.remainingCards.length === 0) { //he draw until vanish remaningCards Arr.
-                // $rootScope.DominoGame.chooseNextPlayer();
-               // client.send(JSON.stringify({ type: "drawCard", flag: false }), true);
-                client.send(JSON.stringify({ type: "passTurn", flag: true }), true);
-                //$scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
+
+
+            //In case the card sent is valid for ground.
+            else {
+                if ($scope.leftStackPos < 190 && !$scope.leftFirstRow && $scope.side == "head") { //we reached max. cards on 1st left stack row so we create the left stack edge card
+                    $scope.leftStackEdge = $rootScope.DominoGame.playstack[0];
+                    $rootScope.DominoGame.leftStackEdgeIndex = 0;
+                    $rootScope.DominoGame.leftStackEdgeFlag = true;
+                    $scope.leftFirstRow = true;
+                    $scope.leftStackRow = [];
+                    $rootScope.safeApply($scope);
+                }
+                else if ($scope.rightStack && $scope.rightStack.length == 3 && !$scope.rightFirstRow && $scope.side == "tail") {
+                    $scope.rightStackEdge = $rootScope.DominoGame.playstack[$rootScope.DominoGame.playstack.length - 1];
+                    $rootScope.DominoGame.rightStackEdgeIndex = $scope.rightStack.length + 1
+                    $rootScope.DominoGame.rightStackEdgeFlag = true;
+                    $scope.rightFirstRow = true;
+                    $scope.rightStackRow = [];
+                    $rootScope.safeApply($scope);
+                }
+                else if ($scope.leftStackEdge && $scope.side == "head") {
+                    Utils.log("Left Stack 2nd row", TAG);
+                    $scope.leftStack1 = _.initial($rootScope.DominoGame.playstack, $rootScope.DominoGame.playstack.length - $rootScope.DominoGame.leftStackEdgeIndex - 1);
+                    $scope.leftStack1.splice($scope.leftStack1.length - 1, 1);
+                    $scope.leftStackRow.push($scope.leftStack1[0]);
+                    $rootScope.safeApply($scope);
+                }
+                else if ($scope.rightStackEdge && $scope.side == "tail") {
+                    Utils.log("Right Stack 2nd row", TAG);
+                    $scope.rightStackRow = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.rightStackEdgeIndex);
+                    $scope.rightStackRow.splice(0, 1);
+                    $rootScope.safeApply($scope);
+                }
+                else {
+                    $scope.leftStack = _.initial($rootScope.DominoGame.playstack, $rootScope.DominoGame.playstack.length - $rootScope.DominoGame.firstCardIndex - 1);
+                    $scope.rightStack = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.firstCardIndex);
+                    if ($scope.leftFirstRow) {  //in Case we have leftStack another row so get the rest after the index of left stack edge
+                        $scope.leftStack = _.rest($scope.leftStack, $rootScope.DominoGame.leftStackEdgeIndex);
+                        $scope.leftStack.splice(0, 1);
+                    }
+                    if ($scope.rightFirstRow) {
+                        $scope.rightStack = _.initial($scope.rightStack, $rootScope.DominoGame.rightStackEdgeIndex - 2)
+                    }
+                    Utils.log("Left Stack Count" + $scope.leftStack.length, TAG);
+                    Utils.log("Right Stack Count" + $scope.rightStack.length, TAG);
+                    //Splice first card element
+                    $scope.leftStack.splice($scope.leftStack.length - 1, 1);
+                    $scope.rightStack.splice(0, 1);
+                    $scope.leftStackPos = $scope.leftStackPosition(); //handling position of leftStack cards
+                    Utils.log("Right Stack " + JSON.stringify($scope.rightStack), TAG);
+                    Utils.log("Left Stack " + JSON.stringify($scope.leftStack), TAG);
+                    $rootScope.safeApply($scope);
+                }
+                client.send(JSON.stringify({ type: "cardsuccessed", card: $scope.playedcard }), true);
+                // $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
+                //count remaining cards for the player
+                //case no cards or the remaining card and no one can play -> calculate score
+                if ($rootScope.DominoGame.players[$rootScope.DominoGame.currentPlayer].countHand() == 0 || ($rootScope.DominoGame.remainingCards.length == 0 && !$rootScope.DominoGame.gameCanPlay())) {
+
+                    //cal score
+                    $scope.playerScore = $rootScope.DominoGame.calScore();
+                    //update score sheet
+                    $scope.scoreSheet[$scope.playerScore.player].score += $scope.playerScore.score;
+                    $scope.clients[$scope.playerScore.player].send(JSON.stringify({ type: "message", content: "You are the winner" }), true);
+                    //show dialog for the score
+                }
+                else {
+                    $scope.getNextPlayer();
+                }
+
             }
         }
+        //draw card and check if the card can be played to disable draw button
         else if ($scope.data.type == "yDrawCard") {
-            $rootScope.DominoGame.drawCard($rootScope.DominoGame.currentPlayer);
+            if ($rootScope.DominoGame.drawCard($rootScope.DominoGame.currentPlayer))
+                $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "drawCard", flag: false }), true);
             client.send(JSON.stringify({type: "drawedCard", card: $rootScope.DominoGame.drawedCard}), true);
         }
 
         else if ($scope.data.type == "yPassTurn") {
-            $rootScope.DominoGame.chooseNextPlayer();
-            $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
-        }
-        //In case the card sent is valid for ground.
-        else {
-            if ($scope.leftStackPos < 190 && !$scope.leftFirstRow && $scope.side == "head") { //we reached max. cards on 1st left stack row so we create the left stack edge card
-                $scope.leftStackEdge = $rootScope.DominoGame.playstack[0];
-                $rootScope.DominoGame.leftStackEdgeIndex = 0;
-                $rootScope.DominoGame.leftStackEdgeFlag = true;
-                $scope.leftFirstRow = true;
-                $scope.leftStackRow = [];
-                $rootScope.safeApply($scope);
-            }
-            else if ($scope.rightStack && $scope.rightStack.length == 3 && !$scope.rightFirstRow && $scope.side == "tail") {
-                $scope.rightStackEdge = $rootScope.DominoGame.playstack[$rootScope.DominoGame.playstack.length - 1];
-                $rootScope.DominoGame.rightStackEdgeIndex = $scope.rightStack.length + 1
-                $rootScope.DominoGame.rightStackEdgeFlag = true;
-                $scope.rightFirstRow = true;
-                $scope.rightStackRow = [];
-                $rootScope.safeApply($scope);
-            }
-            else if ($scope.leftStackEdge && $scope.side == "head") {
-                Utils.log("Left Stack 2nd row", TAG);
-                $scope.leftStack1 = _.initial($rootScope.DominoGame.playstack, $rootScope.DominoGame.playstack.length - $rootScope.DominoGame.leftStackEdgeIndex - 1);
-                $scope.leftStack1.splice($scope.leftStack1.length - 1, 1);
-                $scope.leftStackRow.push($scope.leftStack1[0]);
-                $rootScope.safeApply($scope);
-            }
-            else if ($scope.rightStackEdge && $scope.side == "tail") {
-                Utils.log("Right Stack 2nd row", TAG);
-                $scope.rightStackRow = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.rightStackEdgeIndex);
-                $scope.rightStackRow.splice(0, 1);
-                $rootScope.safeApply($scope);
-            }
-            else {
-                $scope.leftStack = _.initial($rootScope.DominoGame.playstack, $rootScope.DominoGame.playstack.length - $rootScope.DominoGame.firstCardIndex - 1);
-                $scope.rightStack = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.firstCardIndex);
-                if ($scope.leftFirstRow) {  //in Case we have leftStack another row so get the rest after the index of left stack edge
-                    $scope.leftStack = _.rest($scope.leftStack, $rootScope.DominoGame.leftStackEdgeIndex);
-                    $scope.leftStack.splice(0, 1);
-                }
-                if ($scope.rightFirstRow) {
-                    $scope.rightStack = _.initial($scope.rightStack, $rootScope.DominoGame.rightStackEdgeIndex - 2)
-                }
-                Utils.log("Left Stack Count" + $scope.leftStack.length, TAG);
-                Utils.log("Right Stack Count" + $scope.rightStack.length, TAG);
-                //Splice first card element
-                $scope.leftStack.splice($scope.leftStack.length - 1, 1);
-                $scope.rightStack.splice(0, 1);
-                $scope.leftStackPos = $scope.leftStackPosition(); //handling position of leftStack cards
-                Utils.log("Right Stack " + JSON.stringify($scope.rightStack), TAG);
-                Utils.log("Left Stack " + JSON.stringify($scope.leftStack), TAG);
-                $rootScope.safeApply($scope);
-            }
-            client.send(JSON.stringify({ type: "cardsuccessed", card: $scope.playedcard }), true);
-            // $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
-            //count remaining cards for the player
-            //case no cards or the remaining card and no one can play -> calculate score
-            if ($rootScope.DominoGame.players[$rootScope.DominoGame.currentPlayer].countHand() == 0 || ($rootScope.DominoGame.remainingCards.length == 0 && !$rootScope.DominoGame.gameCanPlay())) {
-
-                //cal score
-                $scope.playerScore = $rootScope.DominoGame.calScore();
-                //update score sheet
-                $scope.scoreSheet[$scope.playerScore.player].score += $scope.playerScore.score;
-                $scope.clients[$scope.playerScore.player].send(JSON.stringify({ type: "message", content: "You are the winner" }), true);
-                //show dialog for the score
-            }
-            else {
-                $rootScope.DominoGame.chooseNextPlayer();
-                $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
-            }
-
+            $scope.getNextPlayer();
         }
 
     });
@@ -242,6 +234,26 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                 return "r180";
         }
 
+    }
+
+    $scope.playerCardStatus = function (cardstatus) {
+        switch (cardstatus) {
+            case "canPlay":
+                break;
+            case "drawCard":
+                $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "drawCard", flag: true }), true);
+                break;
+            case "passTurn":
+                $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "passTurn", flag: true }), true);
+                break;
+
+        }
+
+        $scope.getNextPlayer = function () {
+            $scope.status = $rootScope.DominoGame.nextPlayer();
+            $scope.playerCardStatus($scope.status);
+            $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
+        }
     }
     this.handleKeyDown = function (keyCode) {
         Utils.log("handleKeyDown(" + keyCode + ")", TAG);
