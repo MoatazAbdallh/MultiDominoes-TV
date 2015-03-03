@@ -38,6 +38,7 @@
         this.firstcard = null;
         this.remainingCards = [];
         this.playersLength = 0;
+        this.drawedCard =  null;
         //initialize the deck
         var d = 0;
         for (l = 0; l <= 6; l++) { //i love you
@@ -99,17 +100,29 @@
     DominoGame.prototype.chooseNextPlayer = function () {
         alert("Choose Next Player Fn.");
         if (this.playstack.length == 0) return this.whichPlayer();
-        var startingPos = this.currentPlayer;
-        for (var i = (this.currentPlayer + 1) % this.playersLength; i != startingPos; i = (i + 1) % this.playersLength) {
-            if (this.players[i].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right())) {
-                this.currentPlayer = i;
-                alert("The next player Index is" + this.currentPlayer);
-                break;
-            }
+       // var startingPos = this.currentPlayer;
+        this.currentPlayer =(this.currentPlayer + 1)% this.playersLength;
+       /* if (this.players[nextPlayer].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right()) || this.remainingCards.length > 0) {
+            this.currentPlayer = nextPlayer;
+            alert("The next player Index is" + this.currentPlayer);
         }
+            //return this.currentPlayer;
+        else
+            {
+               for (var i = nextPlayer; i != startingPos; i = (i + 1) % this.playersLength) {
+                   if (this.players[i].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right()))
+                       this.currentPlayer = i;
+               }
+        }*/
+
         return this.currentPlayer;
     }
 
+    DominoGame.prototype.drawCard =function(player){
+        this.drawedCard = this.remainingCards.pop();
+        this.players[player].addDrawedCard(this.drawedCard);
+
+    }
     DominoGame.prototype.makePlay = function (player, cardz, side) {
         alert("Domino Game makePlay Fn.");
 
@@ -120,12 +133,12 @@
 
         // quite confused ,may be the played card isn't the greatest one, why should i add it to the stack before checking???? 
         if (this.playstack.length === 0) {
-            if (this.firstcard.equals(card.left(), card.right())) // have to check
+          //  if (this.firstcard.equals(card.left(), card.right())) // have to check
                 this.playstack.push(card);
 
-            else
+          //  else
             //i need to send the firstcard
-                return false;
+              //  return false;
         }
         else {
             if (side == "head") {
