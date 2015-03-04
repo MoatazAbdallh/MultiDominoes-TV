@@ -24,7 +24,7 @@
         </div>
         <img data-ng-show="rightStackEdge" src="{{'app/images/cards/'+rightStackEdge.r+rightStackEdge.l+'.png'}}" ng-class="EdgeOrientation(rightStackEdge)" style="position:absolute" ng-style="StackEdgeStyle('right')">
         <div style="position:absolute;direction:rtl" ng-style="stackRowStyle('right')">
-            <img data-ng-repeat="card in rightStackRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack1',$index)" />
+            <img data-ng-repeat="card in rightStackRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'rightStack1',$index)" />
         </div>
     </div>
 </div>
