@@ -38,6 +38,7 @@
         this.firstcard = null;
         this.remainingCards = [];
         this.playersLength = 0;
+        this.drawedCard = null;
         //initialize the deck
         var d = 0;
         for (l = 0; l <= 6; l++) { //i love you
@@ -96,36 +97,57 @@
         return this.currentPlayer;
     }
     //internal function: called with .call or .apply
-    DominoGame.prototype.chooseNextPlayer = function () {
+    DominoGame.prototype.nextPlayer = function () {
         alert("Choose Next Player Fn.");
-        if (this.playstack.length == 0) return this.whichPlayer();
-        var startingPos = this.currentPlayer;
-        for (var i = (this.currentPlayer + 1) % this.playersLength; i != startingPos; i = (i + 1) % this.playersLength) {
-            if (this.players[i].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right())) {
-                this.currentPlayer = i;
-                alert("The next player Index is" + this.currentPlayer);
-                break;
-            }
+       // if (this.playstack.length == 0) return this.whichPlayer();
+        // var startingPos = this.currentPlayer;
+        this.currentPlayer = (this.currentPlayer + 1) % this.playersLength;
+
+
+        if (this.players[this.currentPlayer].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right())) {
+            return "canPlay";
         }
-        return this.currentPlayer;
+        else if (this.remainingCards.length > 0)
+            return "drawCard";
+        else
+            return "passTurn";
+
+        /*   //return this.currentPlayer;
+         else
+         {
+         for (var i = nextPlayer; i != startingPos; i = (i + 1) % this.playersLength) {
+         if (this.players[i].canPlay(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right()))
+         this.currentPlayer = i;
+         }
+         }*/
+
+        // return this.currentPlayer;
     }
 
+    DominoGame.prototype.drawCard = function (player) {
+        this.drawedCard = this.remainingCards.pop();
+        this.players[player].addDrawedCard(this.drawedCard);
+        if(this.drawedCard.canMatch(this.playstack[0].left(), this.playstack[this.playstack.length - 1].right()))
+            return true;
+        return false;
+
+    }
     DominoGame.prototype.makePlay = function (player, cardz, side) {
         alert("Domino Game makePlay Fn.");
 
         var card = new DominoGame.Domino(cardz.l, cardz.r);
 
-       alert("Play Stack Length " + this.playstack.length);
+        alert("Play Stack Length " + this.playstack.length);
         alert("Card Side " + side);
 
         // quite confused ,may be the played card isn't the greatest one, why should i add it to the stack before checking???? 
         if (this.playstack.length === 0) {
-            if (this.firstcard.equals(card.left(), card.right())) // have to check
-                this.playstack.push(card);
+            //  if (this.firstcard.equals(card.left(), card.right())) // have to check
+            this.playstack.push(card);
 
-            else
+            //  else
             //i need to send the firstcard
-                return false;
+            //  return false;
         }
         else {
             if (side == "head") {
@@ -135,7 +157,7 @@
                     card.or = 'r90'
                     this.playstack.unshift(card);
                     this.firstCardIndex++;
-                    if(this.leftStackEdgeFlag); //Add this line)
+                    if (this.leftStackEdgeFlag); //Add this line)
                     this.leftStackEdgeIndex++;
                     if (this.rightStackEdgeFlag)
                         this.rightStackEdgeIndex++;
@@ -386,7 +408,7 @@
     DominoGame.Domino.prototype.canMatch = function (left, right) {
         alert("CanMatch Fn.")
         alert("StackLeft " + left + " Stackright " + right);
-        alert("card left "+this.left()+" card right"+ this.right())
+        alert("card left " + this.left() + " card right" + this.right())
         l = this.left();
         r = this.right();
         if (l == left) return 1;
@@ -447,8 +469,8 @@
         for (var i = 0; i < length; i++) {
             if (this.cards[i].equals(left, right)) {
                 this.cards.splice(i, 1);
-                alert("Player Cards Length "+this.cards.length);
-                alert("Player Cards: "+JSON.stringify(this.cards))
+                alert("Player Cards Length " + this.cards.length);
+                alert("Player Cards: " + JSON.stringify(this.cards))
                 console.log("Player " + this.id + " plays: " + left.left() + " " + left.right());
                 break;
             }
