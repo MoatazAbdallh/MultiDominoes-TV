@@ -75,7 +75,7 @@
         }
         // for length less than 4 , add the remaining cards in a new array
         if (this.playersLength < 4)
-            this.remainingCards = this.deck.slice(length * 7, this.deck.length);
+            this.remainingCards = this.deck.slice(this.playersLength * 7);
         // }
     }
 
@@ -144,10 +144,6 @@
         if (this.playstack.length === 0) {
             //  if (this.firstcard.equals(card.left(), card.right())) // have to check
             this.playstack.push(card);
-
-            //  else
-            //i need to send the firstcard
-            //  return false;
         }
         else {
             if (side == "head") {
@@ -161,6 +157,8 @@
                     this.leftStackEdgeIndex++;
                     if (this.rightStackEdgeFlag)
                         this.rightStackEdgeIndex++;
+                    if (this.rightStackSecondEdgeFlag)
+                        this.rightStackSecondEdgeIndex++;
                 }
                 else if (c == card.right()) {
                     card.or = 'r270'
@@ -170,6 +168,8 @@
                         this.leftStackEdgeIndex++;
                     if (this.rightStackEdgeFlag)
                         this.rightStackEdgeIndex++;
+                    if (this.rightStackSecondEdgeFlag)
+                        this.rightStackSecondEdgeIndex++;
                 }
                 else {
                     alert("False Card");
@@ -266,78 +266,86 @@
      }*/
 
     DominoGame.prototype.calScore = function () {
+        alert("CalcScore Fn.");
+        alert(this.currentPlayer)
         var playersLns = this.players.length;
         var startingPos = this.currentPlayer;
         var score = 0;
+        alert(JSON.stringify(this.players[this.currentPlayer].cards));
         if (this.players[this.currentPlayer].cards.length === 0) {
-            for (var i = (startingPos + 1) % playersLns; (i + 1) % playersLns != startingPos; i = (i + 1) % playersLns) {
-                PlayerScore.score += this.players[i].countHand();
-            }
-            PlayerScore.player = this.currentPlayer;
-            return PlayerScore;
+            $.each(this.players, function (i,player) {
+                if(i!=this.currentPlayer)
+                    score += player.countHand();
+            })
 
+            //for (var i = (startingPos + 1) % playersLns; (i + 1) % playersLns != startingPos; i = (i + 1) % playersLns) {
+            //    score += this.players[i].countHand();
+            //}
+            return score;
         }
-        else {
-            _lowest = 0;
-            _hands = [];
-            _commonPlayers = [];
-            _totalCards = 0;
-            _playerCount = this.players[0].countHand();
-            _totalCards += _playerCount;
-            _hands.push(_playerCount);
-            for (var j = 1; j < playersLns; j++) {
-                _playerCount = this.players[j].countHand();
+        else
+            return false;
+        //else {
+        //    _lowest = 0;
+        //    _hands = [];
+        //    _commonPlayers = [];
+        //    _totalCards = 0;
+        //    _playerCount = this.players[0].countHand();
+        //    _totalCards += _playerCount;
+        //    _hands.push(_playerCount);
+        //    for (var j = 1; j < playersLns; j++) {
+        //        _playerCount = this.players[j].countHand();
 
-                _totalCards += _playerCount;
-                _hands.push(_playerCount);
+        //        _totalCards += _playerCount;
+        //        _hands.push(_playerCount);
 
-                if (_hands[_lowest] > _hands[j]) {
-                    _lowest = j;
-                    _occurrences = 1;
-                    // _commonPlayers.push(_lowest);
+        //        if (_hands[_lowest] > _hands[j]) {
+        //            _lowest = j;
+        //            _occurrences = 1;
+        //            // _commonPlayers.push(_lowest);
 
-                }
-                //still looking for a better solution in the case of a tie
-                else if (_hands[_lowest] == _hands[j]) {
-                    _commonPlayers.push(j);
-                    _commonPlayers.push(_lowest);
-                    _occurrences += 1;
-                }
+        //        }
+        //        //still looking for a better solution in the case of a tie
+        //        else if (_hands[_lowest] == _hands[j]) {
+        //            _commonPlayers.push(j);
+        //            _commonPlayers.push(_lowest);
+        //            _occurrences += 1;
+        //        }
 
-            }
+        //    }
 
-            if (_occurrences == 1) {
-                PlayerScore.score = _totalCards - this.players[_lowest].countHand();
-                PlayerScore.player = _lowest;
-                return PlayerScore;
-            }
-            else {
-                _lowest = 0;
-                PlayersCard = [];
-                PlayersCard[_lowest] = this.players[_commonPlayers[_lowest]].getSmallestCard();
-                for (var k = 1; k < _occurrences; k++) {
-                    PlayersCard[k] = this.players[_commonPlayers[k]].getSmallestCard();
-                    if (PlayersCard[_lowest].left() + PlayersCard[_lowest].right() > PlayersCard[k].left() + PlayersCard[k].right())
-                        _lowest = k;
-                    else if (PlayersCard[_lowest].left() + PlayersCard[_lowest].right() == PlayersCard[k].left() + PlayersCard[k].right())
-                        if (Math.abs(PlayersCard[_lowest].left() - PlayersCard[_lowest].right()) > Math.abs(PlayersCard[k].left() - PlayersCard[k].right()))
-                            _lowest = k;
-                }
+        //    if (_occurrences == 1) {
+        //        PlayerScore.score = _totalCards - this.players[_lowest].countHand();
+        //        PlayerScore.player = _lowest;
+        //        return PlayerScore;
+        //    }
+        //    else {
+        //        _lowest = 0;
+        //        PlayersCard = [];
+        //        PlayersCard[_lowest] = this.players[_commonPlayers[_lowest]].getSmallestCard();
+        //        for (var k = 1; k < _occurrences; k++) {
+        //            PlayersCard[k] = this.players[_commonPlayers[k]].getSmallestCard();
+        //            if (PlayersCard[_lowest].left() + PlayersCard[_lowest].right() > PlayersCard[k].left() + PlayersCard[k].right())
+        //                _lowest = k;
+        //            else if (PlayersCard[_lowest].left() + PlayersCard[_lowest].right() == PlayersCard[k].left() + PlayersCard[k].right())
+        //                if (Math.abs(PlayersCard[_lowest].left() - PlayersCard[_lowest].right()) > Math.abs(PlayersCard[k].left() - PlayersCard[k].right()))
+        //                    _lowest = k;
+        //        }
 
-                var startPos = commonPlayers[_lowest];
-                score = 0;
-                _totalCards = 0;
-                for (var m = (startPos + 1) % playersLns; (m + 1) % playersLns != startPos; m = (m + 1) % playersLns) {
-                    _totalCards += this.players[m].countHand();
+        //        var startPos = commonPlayers[_lowest];
+        //        score = 0;
+        //        _totalCards = 0;
+        //        for (var m = (startPos + 1) % playersLns; (m + 1) % playersLns != startPos; m = (m + 1) % playersLns) {
+        //            _totalCards += this.players[m].countHand();
 
 
-                }
-                PlayerScore.score = _totalCards - this.players[startPos].countHand();
-                PlayerScore.player = startPos;
-                return PlayerScore;
+        //        }
+        //        PlayerScore.score = _totalCards - this.players[startPos].countHand();
+        //        PlayerScore.player = startPos;
+        //        return PlayerScore;
 
-            }
-        }
+        //    }
+        //}
     };
 
 
@@ -414,6 +422,7 @@
         if (l == left) return 1;
         if (r == left) return 2;
         if (r == right) return 3;
+        if (l == right) return 4;
         return false;
     }
 

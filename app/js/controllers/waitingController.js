@@ -14,10 +14,7 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
             $rootScope.DominoGame.deal();
             $.each($scope.clients, function (i, client) {
                 $rootScope.DominoGame.players[i].name = client.attributes.name;
-                $rootScope.DominoGame.players[i].type = "cards";
-            //init score
-            $scope.scoreSheet.push({"name": client.attributes.name, "score": 0});
-                client.send(JSON.stringify($rootScope.DominoGame.players[i]), true);
+                client.send(JSON.stringify({ type: "cards", cards: $rootScope.DominoGame.players[i].cards }), true);
             });
             $state.go('game');
            

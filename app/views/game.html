@@ -1,15 +1,14 @@
 ﻿<link href="app/css/game.css" rel="stylesheet" />
 <div id="gameView">
-    <!--<div class="scoresheet">
-        <div class="row scoreheader">
-            <div class="col-50">Name</div>
-            <div class="col-33">Score</div>
+    <div class="scoresheet">
+        <div class="row">
+            <div class="col-25" data-ng-repeat="player in scoreSheet">
+                <span data-ng-bind="player.name"></span>
+                <span> : </span>
+                <span data-ng-bind="player.score"></span>
+            </div>
         </div>
-        <div class="row" data-ng-repeat="player in DominoGame.players">
-            <div class="col-50" data-ng-bind="player.name"></div>
-            <div class="col-33"></div>
-        </div>
-    </div>-->
+    </div>
     <div class="playstack">
         <div class="leftStack"  ng-style="{'left':leftStackPos+'px'}">
             <img data-ng-repeat="card in leftStack" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack',$index)" />
@@ -26,5 +25,14 @@
         <div style="position:absolute;direction:rtl" ng-style="stackRowStyle('right')">
             <img data-ng-repeat="card in rightStackRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'rightStack1',$index)" />
         </div>
+        <img data-ng-show="rightStackSecondEdge" src="{{'app/images/cards/'+rightStackSecondEdge.r+rightStackSecondEdge.l+'.png'}}" ng-class="EdgeOrientation(rightStackSecondEdge)" style="position:absolute;direction:rtl" ng-style="StackEdgeStyle('right2')">
+        <div style="position:absolute;direction:ltr" ng-style="stackRowStyle('right2')">
+            <img data-ng-repeat="card in rightStackSecondRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'rightStack2',$index)" />
+        </div>
+    </div>
+
+    <span ng-bind="DominoGame.remainingCards.length" class=" remainingcount"></span>
+    <div class="remainingcards">
+        <img src="app/images/remainingCards.png" />
     </div>
 </div>

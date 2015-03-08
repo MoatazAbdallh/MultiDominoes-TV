@@ -8,7 +8,7 @@
 
         //set application's global Main variable's controller to this controller
         $scope.playersLength = 0;
-		$scope.scoreSheet = [];
+        $scope.scoreSheet = [];
         var TAG = "Controller - MainController",
 			_THIS = this;
         Main.mainController = _THIS;
@@ -17,7 +17,15 @@
         $scope.ms = window.webapis.multiscreen;
         $scope.clients = [];
 
-        
+        $scope.destroy = function () {
+            Utils.log("Destroying $rootScope", TAG);
+            $scope.clients = [];
+            $scope.scoreSheet = [];
+            $scope.playersLength = 0;
+            $rootScope.gameStartedFlag = false;
+            $rootScope.DominoGame = null;
+            $rootScope.safeApply($scope);
+        }
 
         $scope.onDeviceRetrieved = function (device) {
             Utils.log("Success Retrieved Device ", TAG);
@@ -40,17 +48,22 @@
             });
 
             $scope.channel.on("clientConnect", function (client) {
-                if(!$rootScope.gameStartedFlag){ //in case we don't start game so accept any client request
-                $scope.clients.push(client);
-                $scope.playersLength++;
-                $rootScope.safeApply($scope);
-                $scope.onClientConnect(client);
-                if ($scope.playersLength > 4) //in case we have reached max number of players
-                    client.send(JSON.stringify({ type: "message", content: "Sorry we have reached max. number of players" }), true);
-                if ($scope.playersLength == 1)
-                    $state.go('waiting');
-                if ($scope.playersLength >= 2) //in case we are ready for play we send broadcast message to all players
-                    $scope.channel.broadcast(JSON.stringify({ type: "readyToPlay", flag: true }), true);
+                if (!$rootScope.gameStartedFlag) { //in case we don't start game so accept any client request
+                    $scope.clients.push(client);
+                    var player = {};
+                    player.name = client.attributes.name;
+                    player.score = 0;
+                    $scope.scoreSheet.push(player);
+                    $scope.playersLength++;
+                    Utils.log("players Length: " + $scope.playersLength, TAG);
+                    $rootScope.safeApply($scope);
+                    $scope.onClientConnect(client);
+                    if ($scope.playersLength > 4) //in case we have reached max number of players
+                        client.send(JSON.stringify({ type: "message", content: "Sorry we have reached max. number of players" }), true);
+                    if ($scope.playersLength == 1)
+                        $state.go('waiting');
+                    if ($scope.playersLength >= 2) //in case we are ready for play we send broadcast message to all players
+                        $scope.channel.broadcast(JSON.stringify({ type: "readyToPlay", flag: true }), true);
                 }
                 else
                     client.send(JSON.stringify({ type: "message", content: "Sorry Game has been started, you can join in the next session" }), true);
@@ -60,9 +73,20 @@
                 //In case the start button has been clicked from mobile side
                 if ($scope.data.type == "startPlay" && $scope.data.flag == true)
                     $rootScope.start();
+                //in case continue button has been pressed from mobile
+                if ($scope.data.type == "continuePlay" && $scope.data.flag == true)
+                    $rootScope.continue();
+                //in case exit button has been pressed from mobile
+                if ($scope.data.type == "exitPlay" && $scope.data.flag == true)
+                    $rootScope.exit();
+
             });
             $scope.channel.on("clientDisconnect", function (client) {
                 Utils.log("Client: " + client.attributes.name + " has been disconnected", TAG);
+                $scope.channel.broadcast(JSON.stringify({ type: "message", content: client.attributes.name + " has been disconnected" }));
+                $scope.destroy();
+                $state.go('menu');
+
             });
 
 
@@ -97,6 +121,6 @@
         };
     }
     ]);
-   
+
 })();
 

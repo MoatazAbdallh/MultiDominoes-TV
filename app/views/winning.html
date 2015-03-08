@@ -1,0 +1,8 @@
+﻿<link href="app/css/winning.css" rel="stylesheet" />
+<div id="winningView">
+    <div class="row winnerlogo"></div>
+    <div class="row winnerpalyer">{{winnerPlayer.name +' : '+winnerPlayer.score }} </div>
+    <div ng-mouseover="highlight(0)" ng-click="continue()" class="row btn continue" style="margin-left:40%;margin-top:5%">Continue</div>
+    <div ng-mouseover="highlight(1)" ng-click="exit()" class="row btn exit" style="margin-left:40%;margin-top:2%">Exit</div>
+
+</div>

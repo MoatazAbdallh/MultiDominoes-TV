@@ -9,29 +9,13 @@
 
 .scoresheet{
     position:absolute;
-    top:100px;
-    left:5px;
-    width:245px;
+    top:15px;
+    left:30px;
     color:#fff;
+    font-size:25px;
+    width:100%
 }
-.scoreheader{
-    font-size:20px;
-    font-weight:bold;
-}
-.col-50,.col-33{
-    border:2px solid #fff !important;
-    padding:10px;
-}
-.col-33{
-    flex: 0 0 48.3333% !important;
-max-width: 48.3333% !important;
 
-}
-.col-50{
-    flex: 0 0 48.3333% !important;
-max-width: 48.3333% !important;
-
-}
 .playstack{
     width:950px;
 }
@@ -40,20 +24,20 @@ max-width: 48.3333% !important;
 }
 .centerStack{
     position:absolute;
-    top:300px;
+    top:340px;
     left:600px;
 }
 .leftStack{
     position:absolute;
-    top:300px;
+    top:340px;
 }
 .rightStack{
     position:absolute;
-    top:300px;
+    top:340px;
     left:666px;
 }
 .leftStackRow{
-    top:270px
+    top:310px
 }
 .margingleft{
     margin-left:39px !important;
@@ -67,6 +51,24 @@ max-width: 48.3333% !important;
 
 .pdright180{
     padding-right:5px;
+}
+.remainingcards{
+    position:absolute;
+    top:550px;
+    right:30px;
+}
+.remainingcount{
+    position:absolute;
+    top:600px;
+    right:35px;
+    font-size:30px;
+    border:1px solid;
+    -webkit-border-radius:50px;
+    font-weight:bold;
+    color:#00ccff;
+    width:50px;
+    height:50px;
+    z-index:5000
 }
 /*rotation*/
 .r0            { -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); }

@@ -1,5 +1,5 @@
 ﻿//This Controller will wait until we have minumim no. of players required to start game & then the start button will be appeared.
-app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', function ($scope, FocusHandlerFactory, Utils, $rootScope) {
+app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope','$state', function ($scope, FocusHandlerFactory, Utils, $rootScope,$state) {
     var TAG = "Game View";
     var _THIS = this;
     $scope.leftStackPos = 605;
@@ -16,6 +16,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     //intializing left and right stack
     $scope.leftStack = [];
     $scope.rightStack = [];
+    $scope.rightStackRow = [];
     $scope.channel.on("message", function (msg, client) {
         $scope.data = JSON.parse(msg);
         //In case the message from client is playedcard
@@ -31,11 +32,9 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             });
             Utils.log("Player Turn ID " + $scope.idx, TAG);
 
-            //In case the player play a false one, i will activate the draw button whatever cards or choose to draw.
             if (!$rootScope.DominoGame.makePlay($scope.idx, $scope.playedcard, $scope.side)) {
                     client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose another Card!", card: $scope.playedcard }), true);
                 }
-
 
                 //In case the card sent is valid for ground.
             else {
@@ -62,12 +61,23 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     $scope.leftStackRow.push($scope.leftStack1[0]);
                     $rootScope.safeApply($scope);
                 }
-                else if ($scope.rightStackEdge && $scope.side == "tail") {
+                else if ($scope.rightStackEdge && $scope.side == "tail" && $scope.rightStackRow.length<7) {
                     Utils.log("Right Stack 2nd row", TAG);
                     $scope.rightStackRow = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.rightStackEdgeIndex);
-                    alert(JSON.stringify($scope.rightStackRow))
-                   // $scope.rightStackRow.splice(0, 1);
-                    alert(JSON.stringify($scope.rightStackRow))
+                   // alert(JSON.stringify($scope.rightStackRow))
+                    $rootScope.safeApply($scope);
+                }
+                else if ($scope.rightStackRow && $scope.rightStackRow.length == 7 && $scope.side == "tail" && !$scope.rightSecondRow) { // 2nd right row edge
+                    $scope.rightStackSecondEdge = $rootScope.DominoGame.playstack[$rootScope.DominoGame.playstack.length - 1];
+                    $rootScope.DominoGame.rightStackSecondEdgeIndex = $rootScope.DominoGame.playstack.length;
+                    $rootScope.DominoGame.rightStackSecondEdgeFlag = true;
+                    $scope.rightSecondRow = true;
+                    $scope.rightStackSecondRow = [];
+                    $rootScope.safeApply($scope);
+                }
+                else if ($scope.rightStackSecondEdge && $scope.side == "tail") {
+                    Utils.log("Right Stack 3rd row", TAG);
+                    $scope.rightStackSecondRow = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.rightStackSecondEdgeIndex);
                     $rootScope.safeApply($scope);
                 }
                 else {
@@ -81,46 +91,41 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     $scope.rightStack = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.firstCardIndex);
                         $scope.rightStack.splice(0, 1);
                     }
-                   
-
-                    //if ($scope.leftFirstRow) {  //in Case we have leftStack another row so get the rest after the index of left stack edge
-                    //    $scope.leftStack = _.rest($scope.leftStack, $rootScope.DominoGame.leftStackEdgeIndex);
-                    //    $scope.leftStack.splice(0, 1);
-                    //}
-                    //if ($scope.rightFirstRow) {
-                    //    $scope.rightStack = _.initial($scope.rightStack,$scope.rightStack.length- 3)
-                    //}
-                    Utils.log("Left Stack Count" + $scope.leftStack.length, TAG);
-                    Utils.log("Right Stack Count" + $scope.rightStack.length, TAG);
-
-                    Utils.log("Right Stack " + JSON.stringify($scope.rightStack), TAG);
-                    Utils.log("Left Stack " + JSON.stringify($scope.leftStack), TAG);
                     $rootScope.safeApply($scope);
                 }
                 client.send(JSON.stringify({ type: "cardsuccessed", card: $scope.playedcard }), true);
 
                 //count remaining cards for the player
                 //case no cards or the remaining card and no one can play -> calculate score
-                if ($rootScope.DominoGame.players[$rootScope.DominoGame.currentPlayer].countHand() == 0 || ($rootScope.DominoGame.remainingCards.length == 0 && !$rootScope.DominoGame.gameCanPlay())) {
-
-                    //cal score
-                    $scope.playerScore = $rootScope.DominoGame.calScore();
-                    //update score sheet
-                    $scope.scoreSheet[$scope.playerScore.player].score += $scope.playerScore.score;
-                    $scope.clients[$scope.playerScore.player].send(JSON.stringify({ type: "message", content: "You are the winner" }), true);
+                if ($rootScope.DominoGame.players[$rootScope.DominoGame.currentPlayer].cards.length== 0 || ($rootScope.DominoGame.remainingCards.length == 0 && !$rootScope.DominoGame.gameCanPlay())) {
+                    // calcScore
+                    Utils.log("Winner Player Index: "+$rootScope.DominoGame.currentPlayer,TAG)
+                    $scope.scoreSheet[$rootScope.DominoGame.currentPlayer].score += $rootScope.DominoGame.calScore();
+                    $rootScope.winnerPlayer = $scope.scoreSheet[$rootScope.DominoGame.currentPlayer];
+                    $rootScope.safeApply($scope);
+                    $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "winner", flag: true }), true);
+                    $scope.channel.broadcast(JSON.stringify({ type: "message", content: $scope.scoreSheet[$rootScope.DominoGame.currentPlayer].name+" is the winner" }), true);
                     //show dialog for the score
+                    $state.go('winning');
                 }
                 else {
                     $scope.getNextPlayer();
                 }
-
             }
         }
         //draw card and check if the card can be played to disable draw button
         else if ($scope.data.type == "yDrawCard") {
-            if ($rootScope.DominoGame.drawCard($rootScope.DominoGame.currentPlayer))
+            if ($rootScope.DominoGame.remainingCards.length > 0) {
+                if ($rootScope.DominoGame.drawCard($rootScope.DominoGame.currentPlayer))
+                    $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "drawCard", flag: false }), true);
+                    $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "drawedCard", card: $rootScope.DominoGame.drawedCard }), true);
+            }
+            else {
                 $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "drawCard", flag: false }), true);
-            client.send(JSON.stringify({type: "drawedCard", card: $rootScope.DominoGame.drawedCard}), true);
+                $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "passTurn", flag: true }), true);
+
+            }
+            $rootScope.safeApply($scope);
         }
 
         else if ($scope.data.type == "yPassTurn") {
@@ -136,16 +141,17 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             else
                 $scope.position -= 73;
         });
-        Utils.log("LeftStack Position: " + $scope.position, TAG)
+        //Utils.log("LeftStack Position: " + $scope.position, TAG)
         return $scope.position;
     }
     //This will maintain the style of Left Stack Edge Card according to previous card
     $scope.StackEdgeStyle = function (type) {
         Utils.log("Stack Edge Style: " + type, TAG);
         var style = {};
-        var leftwidth = 0;
-        var rightwidth = 595;
+        
+        
         if (type && type == 'left' && $scope.leftStack) {
+            var leftwidth = 0;
         $.each($scope.leftStack, function (i, card) {
                 if (card.l != card.r)
                     leftwidth += 142;
@@ -153,18 +159,19 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     leftwidth += 73;
         });
             if ($scope.leftStack[0] && $scope.leftStack[0].l != $scope.leftStack[0].r){
-                style["top"] = '405px';
+                style["top"] = '445px';
                 style["left"] = (600 - leftwidth).toString() + 'px';
                 $scope.secondRowLeftStack = 600 - leftwidth + 67; //last position of leftStack 1st row + with of the Edge Stack Card
         }
             else {
-                style["top"] = '443px';
+                style["top"] = '483px';
                 style["left"] = (604 - leftwidth).toString() + 'px';
                 $scope.secondRowLeftStack = 604 - leftwidth + 67; //last position of leftStack 1st row + with of the Edge Stack Card
             }
         }
 
         else if (type && type == 'right' && $scope.rightStack) {
+            var rightwidth = 595;
             $.each($scope.rightStack, function (i, card) {
                 if (card.l != card.r)
                     rightwidth += 142;
@@ -175,9 +182,28 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             $scope.secondRowRightStack = 1285-rightwidth; //last position of rightStack 1st row + with of the Edge Stack Card
 
             if ($scope.rightStack[$scope.rightStack.length - 1] && $scope.rightStack[$scope.rightStack.length - 1].l != $scope.rightStack[$scope.rightStack.length - 1].r)
-                style["top"] = '195px'
+                style["top"] = '235px'
             else
-                style["top"] = '158px'
+                style["top"] = '198px'
+        }
+        else if (type && type == 'right2' && $scope.rightStackRow) {
+            var rightwidth = $scope.secondRowRightStack;
+            $.each($scope.rightStackRow, function (i, card) {
+                if (card.l != card.r)
+                    rightwidth += 142;
+                else
+                    rightwidth += 73;
+            });
+            Utils.log("Right Width: " + rightwidth, TAG)
+            if (rightwidth < 1116){
+            style["right"] = (rightwidth-18).toString() + 'px';
+            $scope.thirdRowRightStack = 1280 - rightwidth + 8;
+            }
+            else {
+                style["right"] = (rightwidth +35).toString() + 'px';
+                $scope.thirdRowRightStack = 1280 - rightwidth -12;
+            }
+            style["top"] = '140px';
         }
         return style;
     }
@@ -188,23 +214,27 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
         if ($scope.secondRowLeftStack)
                 style["left"] = $scope.secondRowLeftStack.toString() + 'px';
         if ($scope.leftStack[0] && $scope.leftStack[0].l != $scope.leftStack[0].r)
-                style["top"] = '440px'
+                style["top"] = '480px'
         else
-                style["top"] = '475px'
+                style["top"] = '515px'
         }
         else if (type && type == 'right') {
             if ($scope.secondRowRightStack)
                 style["right"] = $scope.secondRowRightStack.toString() + 'px';
             if ($scope.rightStack[$scope.rightStack.length - 1] && $scope.rightStack[$scope.rightStack.length - 1].l != $scope.rightStack[$scope.rightStack.length - 1].r)
-                style["top"] = '158px'
+                style["top"] = '198px'
             else
-                style["top"] = '100px'
+                style["top"] = '160px'
+        }
+        else if (type && type == "right2") {
+            style["left"] = $scope.thirdRowRightStack.toString() + 'px'
+            style["top"]='75px'
         }
         return style;
     }
     $scope.cardOrientation = function (card, type, index) {
         if (card) {
-            Utils.log("Card Or is:" + card.or, TAG);
+            //Utils.log("Card Or is:" + card.or, TAG);
             if (type == 'leftStack' ) {
 
                 if (card.l != card.r) {
@@ -252,13 +282,13 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                 if (card.l != card.r) {
                     switch (card.or) {
                         case "r90":
-                            if ($scope.rightStackRow[index - 1] && $scope.rightStackRow[index - 1].l == $scope.rightStackRow[index - 1].r)
+                            if ($scope.rightStackRow[index + 1] && $scope.rightStackRow[index + 1].l == $scope.rightStackRow[index + 1].r)
                                 return "r270 mgleft180";
                             else
                                 return "r270 margingleft";
                             break;
                         case "r270":
-                            if ($scope.rightStackRow[index - 1] && $scope.rightStackRow[index - 1].l == $scope.rightStackRow[index - 1].r)
+                            if ($scope.rightStackRow[index + 1] && $scope.rightStackRow[index + 1].l == $scope.rightStackRow[index + 1].r)
                                 return "r90 mgleft180";
                             else
                                 return "r90 margingleft";
@@ -269,13 +299,24 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     if (index == 0)//in case if the 1st card in the 2nd row is r180
                         return "r90 margingleft";
                     else
-                        return "r180 pdright180";
+                        return "r180";
+            }
+            else if (type == 'rightStack2') {
+                if (card.l != card.r) {
+                            if ($scope.rightStackSecondRow[index - 1] && $scope.rightStackSecondRow[index - 1].l == $scope.rightStackSecondRow[index - 1].r)
+                                return card.or+" mgleft180";
+                            else
+                                return card.or + " margingleft";
+                }
+                else
+                    return "r90 margingleft"
+
             }
         }
     }
     $scope.EdgeOrientation = function (card) {
         if (card) {
-            Utils.log("Left Edge Orientation: " + card.or, TAG)
+            //Utils.log("Left Edge Orientation: " + card.or, TAG)
             if (card.or != "r270") {
                 var or = card.or.slice(0);
                 var finalOr = parseInt(or) + 90;
@@ -288,6 +329,8 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     }
 
     $scope.playerCardStatus = function (cardstatus) {
+        Utils.log("Player Card Status: "+cardstatus, TAG);
+
         switch (cardstatus) {
             case "canPlay":
                 break;
@@ -299,13 +342,13 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                 break;
 
         }
-
+    }
         $scope.getNextPlayer = function () {
             $scope.status = $rootScope.DominoGame.nextPlayer();
             $scope.playerCardStatus($scope.status);
             $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "message", content: "It's your Turn" }), true);
         }
-    }
+    
     this.handleKeyDown = function (keyCode) {
         Utils.log("handleKeyDown(" + keyCode + ")", TAG);
         switch (keyCode) {

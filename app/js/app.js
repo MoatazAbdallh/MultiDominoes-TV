@@ -31,6 +31,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         templateUrl: 'app/views/game.html',
         controller: 'gameController'
     })
+        .state('winning', {
+            url: '/winning',
+            templateUrl: 'app/views/winning.html',
+            controller: 'winningController'
+        })
     .state('test', {
         url: '/test',
         templateUrl: 'app/views/test.html',
@@ -60,7 +65,7 @@ app.run(["$http","ConfigData","Utils","$rootScope",'FocusHandlerFactory',functio
 	    }
 	    else { scope.$apply(fn); }
 	};
-
+	
 	$rootScope.setControllerFocus = function (_this) {
 	    if (_this != FocusHandlerFactory.getCurrentController)
 	        FocusHandlerFactory.setCurrentFocusController(_this);
