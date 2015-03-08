@@ -264,27 +264,49 @@
 
      return -1;
      }*/
-
+    DominoGame.prototype.getWinner = function () {
+        alert("get Winner Fn.");
+        if (this.players[this.currentPlayer].cards.length == 0)
+            return this.currentPlayer;
+        else { //case el la3ba 2aflet we choose the min player have count hand
+            var winner = _.min(this.players, function (player) {
+                return player.countHand()
+            });
+            var idx = 0;
+            _.filter(this.players, function (player, id) {
+                if (player.name == winner.name) {
+                    idx = id;
+                    return true;
+                }
+            });
+            return idx;
+        }
+    }
     DominoGame.prototype.calScore = function () {
         alert("CalcScore Fn.");
         alert(this.currentPlayer)
         var playersLns = this.players.length;
         var startingPos = this.currentPlayer;
         var score = 0;
-        alert(JSON.stringify(this.players[this.currentPlayer].cards));
         if (this.players[this.currentPlayer].cards.length === 0) {
             $.each(this.players, function (i,player) {
                 if(i!=this.currentPlayer)
                     score += player.countHand();
             })
-
-            //for (var i = (startingPos + 1) % playersLns; (i + 1) % playersLns != startingPos; i = (i + 1) % playersLns) {
-            //    score += this.players[i].countHand();
-            //}
             return score;
         }
-        else
-            return false;
+        else {
+            // in case el le3aba 2aflet
+           var winner= _.min(this.players, function (player) {
+                return player.countHand()
+           });
+           $.each(this.players, function (i, player) {
+               if (player.name != winner.name)
+                   score += player.countHand();
+           });
+           return score - winner.countHand();
+        }
+            
         //else {
         //    _lowest = 0;
         //    _hands = [];

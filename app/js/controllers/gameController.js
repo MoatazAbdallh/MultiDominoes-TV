@@ -17,6 +17,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     $scope.leftStack = [];
     $scope.rightStack = [];
     $scope.rightStackRow = [];
+    $scope.channel.removeAllListeners("message")
     $scope.channel.on("message", function (msg, client) {
         $scope.data = JSON.parse(msg);
         //In case the message from client is playedcard
@@ -99,12 +100,17 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                 //case no cards or the remaining card and no one can play -> calculate score
                 if ($rootScope.DominoGame.players[$rootScope.DominoGame.currentPlayer].cards.length== 0 || ($rootScope.DominoGame.remainingCards.length == 0 && !$rootScope.DominoGame.gameCanPlay())) {
                     // calcScore
-                    Utils.log("Winner Player Index: "+$rootScope.DominoGame.currentPlayer,TAG)
-                    $scope.scoreSheet[$rootScope.DominoGame.currentPlayer].score += $rootScope.DominoGame.calScore();
-                    $rootScope.winnerPlayer = $scope.scoreSheet[$rootScope.DominoGame.currentPlayer];
+                    $rootScope.winnerPlayerIndex = $rootScope.DominoGame.getWinner();
+                    Utils.log("Winner Player Index: " + $rootScope.winnerPlayerIndex, TAG)
+                    $scope.scoreSheet[$rootScope.winnerPlayerIndex].score += $rootScope.DominoGame.calScore();
+                    $rootScope.winnerPlayer = $scope.scoreSheet[$rootScope.winnerPlayerIndex];
                     $rootScope.safeApply($scope);
-                    $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "winner", flag: true }), true);
+                    $scope.clients[$rootScope.winnerPlayerIndex].send(JSON.stringify({ type: "winner", flag: true }), true);
                     $scope.channel.broadcast(JSON.stringify({ type: "message", content: $scope.scoreSheet[$rootScope.DominoGame.currentPlayer].name+" is the winner" }), true);
+                    $.each($scope.clients, function (i, client) { //send false winner to other player to go to waiting screen which wait the winner player to continue game
+                        if(i!=$rootScope.winnerPlayerIndex)
+                            client.send(JSON.stringify({ type: "winner", flag: false }), true);
+                    })
                     //show dialog for the score
                     $state.go('winning');
                 }
@@ -129,8 +135,17 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
         }
 
         else if ($scope.data.type == "yPassTurn") {
+            $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "passTurn", flag: false }), true);
             $scope.getNextPlayer();
         }
+        //in case continue button has been pressed from mobile
+        else if ($scope.data.type == "continuePlay" && $scope.data.flag == true){
+            Utils.log("recieved Continue Play form Mobile", TAG);
+            $rootScope.continue();
+        }
+        //in case exit button has been pressed from mobile
+        else if ($scope.data.type == "exitPlay" && $scope.data.flag == true)
+            $rootScope.exit();
 
     });
     $scope.leftStackPosition = function () {

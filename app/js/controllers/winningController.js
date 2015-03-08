@@ -7,7 +7,8 @@ app.controller('winningController', ['$scope', 'FocusHandlerFactory', 'Utils', '
         $rootScope.setControllerFocus(_THIS);
     
         $rootScope.continue = function () {
-            $scope.destroy();
+            $rootScope.DominoGame = null;
+            $rootScope.safeApply($scope);
             $rootScope.start();
         }
         $rootScope.exit = function () {

@@ -26,6 +26,10 @@
             $rootScope.DominoGame = null;
             $rootScope.safeApply($scope);
         }
+        $scope.continueDestroy = function () {
+            $rootScope.DominoGame = null;
+            $rootScope.safeApply($scope);
+        }
 
         $scope.onDeviceRetrieved = function (device) {
             Utils.log("Success Retrieved Device ", TAG);
@@ -73,12 +77,7 @@
                 //In case the start button has been clicked from mobile side
                 if ($scope.data.type == "startPlay" && $scope.data.flag == true)
                     $rootScope.start();
-                //in case continue button has been pressed from mobile
-                if ($scope.data.type == "continuePlay" && $scope.data.flag == true)
-                    $rootScope.continue();
-                //in case exit button has been pressed from mobile
-                if ($scope.data.type == "exitPlay" && $scope.data.flag == true)
-                    $rootScope.exit();
+               
 
             });
             $scope.channel.on("clientDisconnect", function (client) {
