@@ -72,14 +72,7 @@
                 else
                     client.send(JSON.stringify({ type: "message", content: "Sorry Game has been started, you can join in the next session" }), true);
             });
-            $scope.channel.on("message", function (msg, client) {
-                $scope.data = JSON.parse(msg);
-                //In case the start button has been clicked from mobile side
-                if ($scope.data.type == "startPlay" && $scope.data.flag == true)
-                    $rootScope.start();
-               
-
-            });
+       
             $scope.channel.on("clientDisconnect", function (client) {
                 Utils.log("Client: " + client.attributes.name + " has been disconnected", TAG);
                 $scope.channel.broadcast(JSON.stringify({ type: "message", content: client.attributes.name + " has been disconnected" }));
@@ -110,12 +103,12 @@
             Utils.log("***onApplicationUnload()***");
         };
 
-        this.handleKeyDown = function (keyCode) {
+        this.handleKeyDown = function (keyCode,event) {
             Utils.log("handleKeyDown(" + keyCode + ")", TAG);
 
             _THIS.currentController = FocusHandlerFactory.getCurrentController();
             if (_THIS.currentController != null) {
-                _THIS.currentController.handleKeyDown(keyCode);
+                _THIS.currentController.handleKeyDown(keyCode,event);
             }
         };
     }

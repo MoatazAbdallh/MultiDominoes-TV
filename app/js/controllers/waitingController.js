@@ -20,6 +20,15 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
            
         }
 
+        $scope.channel.removeAllListeners("message")
+        $scope.channel.on("message", function (msg, client) {
+            $scope.data = JSON.parse(msg);
+            //In case the start button has been clicked from mobile side
+            if ($scope.data.type == "startPlay" && $scope.data.flag == true)
+                $rootScope.start();
+
+
+        });
         this.handleKeyDown = function (keyCode) {
         Utils.log("handleKeyDown(" + keyCode + ")", TAG);
             switch (keyCode) {

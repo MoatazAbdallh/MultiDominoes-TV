@@ -36,7 +36,7 @@ Main.keyDown = function()
 {
     var keyCode = event.keyCode;
     if(Main.mainController!==null && Main.mainController!==undefined){
-        Main.mainController.handleKeyDown(keyCode);
+        Main.mainController.handleKeyDown(keyCode,event);
     }else{
         alert("Main.mainController is NULL");
     }

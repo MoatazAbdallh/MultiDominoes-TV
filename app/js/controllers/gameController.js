@@ -138,14 +138,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "passTurn", flag: false }), true);
             $scope.getNextPlayer();
         }
-        //in case continue button has been pressed from mobile
-        else if ($scope.data.type == "continuePlay" && $scope.data.flag == true){
-            Utils.log("recieved Continue Play form Mobile", TAG);
-            $rootScope.continue();
-        }
-        //in case exit button has been pressed from mobile
-        else if ($scope.data.type == "exitPlay" && $scope.data.flag == true)
-            $rootScope.exit();
+       
 
     });
     $scope.leftStackPosition = function () {
