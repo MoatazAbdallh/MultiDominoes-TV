@@ -19,15 +19,16 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
             $state.go('game');
            
         }
-
+        $scope.checkStart = function () {
+            if ($scope.playersLength > 1)
+                $scope.start();
+        }
         $scope.channel.removeAllListeners("message")
         $scope.channel.on("message", function (msg, client) {
             $scope.data = JSON.parse(msg);
             //In case the start button has been clicked from mobile side
             if ($scope.data.type == "startPlay" && $scope.data.flag == true)
                 $rootScope.start();
-
-
         });
         this.handleKeyDown = function (keyCode) {
         Utils.log("handleKeyDown(" + keyCode + ")", TAG);
@@ -38,6 +39,7 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
                     break;
                 case tvKey.KEY_ENTER:
                 case tvKey.KEY_PANEL_ENTER:
+                    if ($scope.playersLength>1)
                     $scope.start();
                     break;
 

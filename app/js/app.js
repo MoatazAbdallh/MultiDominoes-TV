@@ -4,7 +4,7 @@
  * ---------------------------------------
  */
 var app = angular.module("MultiDominoes", ["ionic",
-                                           ,"ngAudio"
+                                           
                                            ,"app.configuration"
 										,"app.directives"
 									  	,"app.services"

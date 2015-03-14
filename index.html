@@ -19,7 +19,7 @@
     <!--<script type="text/javascript" language="javascript" src="app/js/libs/jquery.min.js"></script>-->
     <!--<script src="app/js/libs/bootstrap.min.js"></script>-->
     <script type="text/javascript" language="javascript" src="app/js/libs/ionic/js/ionic.bundle.js"></script>
-    <script src="app/js/libs/angular.audio.js"></script>
+    <!--<script src="app/js/libs/angular.audio.js"></script>-->
     <!--<script src="app/js/libs/multiscreen-smarttv-1.1.18.min.js"></script>-->
     <script src="app/js/libs/multiscreen-smarttv-1.1.19.min.js"></script>
     <link href="app/js/libs/ionic/css/ionic.min.css" rel="stylesheet" />
@@ -52,9 +52,9 @@
 </head>
 
 <body id="AppBody" ng-controller="mainController"
-      onload="Main.onLoad();" onunload="Main.onUnload();">
+      onload="Main.onLoad();" onunload="Main.onUnload();" >
 
-    <a href="javascript:void(0);" id="anchor_main" onkeydown="Main.keyDown();" style="z-index:1000"></a>
-    <div ui-view></div>
+    <a href="javascript:void(0);" id="anchor_main" onkeydown="Main.keyDown();" ></a>
+    <div ui-view ng-cloak></div>
 </body>
 </html>

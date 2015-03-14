@@ -9,7 +9,8 @@ app.controller('winningController', ['$scope', 'FocusHandlerFactory', 'Utils', '
 
     $scope.channel.removeAllListeners("message")
     $scope.channel.on("message", function (msg, client) {
-        Utils.log("Recieving Message.....", TAG);
+        swal("Recieving Message.....");
+        document.getElementById("anchor_main").focus();
 
         $scope.data = JSON.parse(msg);
         //in case continue button has been pressed from mobile
@@ -39,6 +40,10 @@ app.controller('winningController', ['$scope', 'FocusHandlerFactory', 'Utils', '
                 $scope.exit();
                 break;
         }
+    }
+    $scope.return = function () {
+        widgetAPI.blockNavigation(event);
+        $state.go('menu');
     }
     $scope.highlight = function (index) {
         Utils.log("Highlight Index" + index, TAG);
@@ -85,8 +90,7 @@ app.controller('winningController', ['$scope', 'FocusHandlerFactory', 'Utils', '
 
             case tvKey.KEY_RETURN:
             case tvKey.KEY_PANEL_RETURN:
-                widgetAPI.blockNavigation(event);
-                $state.go('menu');
+                $scope.return();
                 break;
         }
     };

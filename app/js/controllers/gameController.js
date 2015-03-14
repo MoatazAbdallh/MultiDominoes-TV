@@ -24,14 +24,14 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
         if ($scope.data.type == "playedcard") {
             $scope.playedcard = $scope.data.card;
             $scope.side = $scope.data.side;
-            Utils.log("played card left " + $scope.data.card.l + "Right: " + $scope.data.card.r, TAG);
+            //Utils.log("played card left " + $scope.data.card.l + "Right: " + $scope.data.card.r, TAG);
             _.filter($rootScope.DominoGame.players, function (player, id) {
                 if (player.name == client.attributes.name) {
                     $scope.idx = id;
                     return true;
                 }
             });
-            Utils.log("Player Turn ID " + $scope.idx, TAG);
+            //Utils.log("Player Turn ID " + $scope.idx, TAG);
 
             if (!$rootScope.DominoGame.makePlay($scope.idx, $scope.playedcard, $scope.side)) {
                     client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose another Card!", card: $scope.playedcard }), true);

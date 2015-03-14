@@ -6,25 +6,28 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
 
         Utils.log("Intializing", TAG);
 
+        if (!$rootScope.channelCreationFlag) {
         // Get the local Device (SmartTV)
         if ($scope.ms) {
-            //swal("MultiScreen Lib is Loaded")
             Utils.log("MultiScreen Lib is Loaded : ", TAG);
             $scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
                 swal({ title: "Network Error!", text: "Sorry Can't Retrieve Device ", type: "error", confirmButtonText: "Ok" }, function () {
                     $scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
-                        swal({ title: "Network Error!", text: "Sorry App Should be restarted ", type: "error", confirmButtonText: "Ok" },function(){
+                        swal({ title: "Network Error!", text: "Sorry App Should be restarted ", type: "error", confirmButtonText: "Ok" }, function () {
                             $scope.exit();
-                        })
+                        });
+                        document.getElementById("anchor_main").focus();
                     })
-                })
+                });
+                document.getElementById("anchor_main").focus();
                 });
                 //Utils.log("Device.getCurrent() Error : " + error, TAG);
         }
+        $rootScope.channelCreationFlag=true
+    }
         $rootScope.setControllerFocus(_THIS);
-       swal("Here's message")
-       $('.sweet-alert').append('<a href="javascript:void(0);" id="anchor_main" onkeydown="Main.keyDown();" style="z-index:1000"></a>')
-        $scope.highlight = function (index) {
+
+       $scope.highlight = function (index) {
             Utils.log("Highlight Index" + index, TAG);
             $rootScope.safeApply($scope);
             switch (index) {

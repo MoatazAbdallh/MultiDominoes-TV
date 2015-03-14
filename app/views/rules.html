@@ -1,13 +1,13 @@
 <link href="app/css/rules.css" rel="stylesheet" />
 <div id="rulesView" >
-    <div style="margin-top:4%">
+    <div style="margin-top:3%">
         <div class="title">Game Initialization</div>
         <div class="items">* The game begins by shuffling the dominoes and dealing a hand to each player.</div>
         <div class="items">* Each Player starts with 7 cards.</div>
         <div class="items">* The player with the highest double makes the first move.</div>
 
         <div class="title" style="margin-top:3%">Gameplay</div>
-        <div class="items">* The first player can start by playing any domino from his hand.</div>
+        <!--<div class="items">* The first player can start by playing any domino from his hand.</div>-->
         <div class="items">* The play proceeds and each next player adds a matching domino to an open end of the board.</div>
         <div class="items">* In case the player cannot play, he should draw from the boneyard.</div>
         <div class="items">* When the boneyard cards have been finished, player should pass his turn.</div>
@@ -18,9 +18,10 @@
         <div class="items">* If there is a tie,the winner is the player with the lowest individual domino.</div>
         <div class="items">* The winner  receives the sum of all points in other player's hands minus the sum of points in his own.</div>
     </div>
+    <div class="keyhelp">
+        <div class="row" style="position:relative;right:0px;direction:rtl;margin-right:10px;">
+            <div class="ico exit_ico" ng-click="exit()"></div>
+            <div class="ico_txt" ng-click="return()">Return</div>
+        </div>
+    </div>
 </div>
-
-
-<audio autoplay loop>
-    <source src="app/sounds/domino-start.mp3" type="audio/mp3" />
-</audio>

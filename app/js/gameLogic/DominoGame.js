@@ -463,9 +463,9 @@
         for (var i = 0; i < length; i++) {
             if (this.cards[i].equals(left, right)) {
                 this.cards.splice(i, 1);
-                alert("Player Cards Length " + this.cards.length);
-                alert("Player Cards: " + JSON.stringify(this.cards))
-                console.log("Player " + this.id + " plays: " + left.left() + " " + left.right());
+                //alert("Player Cards Length " + this.cards.length);
+                //alert("Player Cards: " + JSON.stringify(this.cards))
+                //console.log("Player " + this.id + " plays: " + left.left() + " " + left.right());
                 break;
             }
         }

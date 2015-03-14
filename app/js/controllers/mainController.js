@@ -4,12 +4,13 @@
     //receive all keydown events then cleverly select the right child controller to pass
     //the keydown event to
 
-    app.controller('mainController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state','ngAudio', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state,ngAudio) {
+    app.controller('mainController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state) {
 
         //set application's global Main variable's controller to this controller
         $scope.playersLength = 0;
         $scope.scoreSheet = [];
         $scope.isMute = false;
+        $rootScope.channelCreationFlag = false;
         var TAG = "Controller - MainController",
 			_THIS = this;
         Main.mainController = _THIS;
@@ -37,18 +38,17 @@
         }
 
         $scope.onDeviceRetrieved = function (device) {
-            //swal("Success Retrieved Device")
             //Utils.log("Success Retrieved Device ", TAG);
             $scope.device = device;
             $scope.connectToChannel();
         }
         $scope.connectToChannel = function () {
             //Utils.log("Open Channel : ", TAG);
-            //swal("Connect To Channel Function")
             $scope.device.openChannel($scope.channelId, { name: "Host" }, $scope.onConnect, function (error) {
                 swal({ title: "Network Error!", text: "Can't Open this channel, Try again later", type: "error", confirmButtonText: "Ok" }, function () {
                     $scope.contentToChannel();
                 });
+                document.getElementById("anchor_main").focus();
                 //Utils.log("device.openChannel() Error : " + error, TAG);
             });
         };
@@ -59,7 +59,7 @@
             // Wire up some event handlers
             $scope.channel.on("disconnect", function (client) {
                 swal({ title: "Network Error!", text: "Channel has been disconnected", type: "error", confirmButtonText: "Ok" });
-                //Utils.log("Channel has been disconnected", TAG);
+                document.getElementById("anchor_main").focus();
             });
 
             $scope.channel.on("clientConnect", function (client) {
@@ -107,12 +107,12 @@
 
         this.onApplicationOnLoadComplete = function () {
             //Utils.log("***onApplicationOnLoadComplete()***", TAG);
-            $scope.audios = [
-                ngAudio.load('app/sounds/domino-start.mp3'),
-                ngAudio.load('app/sounds/domino-shuffle.mp3'),
-                ngAudio.load('app/sounds/domino-stone-on-the-table.mp3'),
-                ngAudio.load('app/sounds/winner-dialog.mp3')
-            ];
+            //$scope.audios = [
+            //    ngAudio.load('app/sounds/domino-start.mp3'),
+            //    ngAudio.load('app/sounds/domino-shuffle.mp3'),
+            //    ngAudio.load('app/sounds/domino-stone-on-the-table.mp3'),
+            //    ngAudio.load('app/sounds/winner-dialog.mp3')
+            //];
             $state.go('menu');
         };
 
