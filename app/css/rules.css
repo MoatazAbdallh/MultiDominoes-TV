@@ -1,0 +1,23 @@
+﻿#rulesView {
+    width: 1280px;
+    height: 720px;
+    background-image: url('../images/Domino-Back.png');
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.title{
+    font-size:35px;
+    font-weight:bolder;
+    text-align:center;
+    color:rgb(240,184,64);
+    margin-bottom:2%
+}
+.items{
+    font-size:30px;
+    font-weight:bolder;
+    line-height:120%;
+    color:rgb(74,135,238);
+    padding-left:10px;
+    padding-right:5px;
+}

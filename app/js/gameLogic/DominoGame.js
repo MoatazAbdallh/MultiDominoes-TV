@@ -67,7 +67,7 @@
     DominoGame.prototype.deal = function () {
         //first check if the number of players is more than 4
         // I think it is better to be handled in the controller
-        console.log("Connected Player Length " + this.playersLength);
+       // console.log("Connected Player Length " + this.playersLength);
 
         // if(this.players.length != 4){
         for (i = 0; i < this.playersLength; i++) {
@@ -98,7 +98,7 @@
     }
     //internal function: called with .call or .apply
     DominoGame.prototype.nextPlayer = function () {
-        alert("Choose Next Player Fn.");
+        //alert("Choose Next Player Fn.");
        // if (this.playstack.length == 0) return this.whichPlayer();
         // var startingPos = this.currentPlayer;
         this.currentPlayer = (this.currentPlayer + 1) % this.playersLength;
@@ -133,12 +133,12 @@
 
     }
     DominoGame.prototype.makePlay = function (player, cardz, side) {
-        alert("Domino Game makePlay Fn.");
+        //alert("Domino Game makePlay Fn.");
 
         var card = new DominoGame.Domino(cardz.l, cardz.r);
 
-        alert("Play Stack Length " + this.playstack.length);
-        alert("Card Side " + side);
+        //alert("Play Stack Length " + this.playstack.length);
+        //alert("Card Side " + side);
 
         // quite confused ,may be the played card isn't the greatest one, why should i add it to the stack before checking???? 
         if (this.playstack.length === 0) {
@@ -213,7 +213,7 @@
     }
 
     DominoGame.prototype.gameCanPlay = function () {
-        console.log("Domino Game gameCanPlay Fn.");
+        //console.log("Domino Game gameCanPlay Fn.");
         var canPlay = false;
         if (this.playstack.length === 0) {
             return true;
@@ -228,44 +228,8 @@
         return canPlay;
     }
 
-    /* DominoGame.prototype.whoWon = function () {
-     var startingPos = this.currentPlayer;
-     var length = this.players.length;
-     for (var i = startingPos; (i + 1) % length != startingPos ; i = (i + 1) % length) {
-     if (this.players[i].cards.length == 0) {
-     return i;
-     }
-     }
-
-     if (this.gameCanPlay() == false) {
-
-     console.log("game blocked");
-     _lowest = 0;
-     _hands = [];
-     _hands.push(this.players[0].countHand());
-     _occurrences = 1;
-
-     for (var i = 1, length = this.players.length; i < length; i++) {
-     _hands.push(this.players[i].countHand());
-     if (_hands[_lowest] > _hands[i]) {
-     _lowest = i;
-     _occurrences = 1;
-     }
-
-     if (_hands[_lowest] == _hands[i]) {
-     _occurrences += 1;
-     }
-
-     }
-
-     if (_occurrences == 1)
-     return _lowest;
-     }
-
-     return -1;
-     }*/
     DominoGame.prototype.getWinner = function () {
-        alert("get Winner Fn.");
+        //alert("get Winner Fn.");
         if (this.players[this.currentPlayer].cards.length == 0)
             return this.currentPlayer;
         else { //case el la3ba 2aflet we choose the min player have count hand
@@ -283,8 +247,7 @@
         }
     }
     DominoGame.prototype.calScore = function () {
-        alert("CalcScore Fn.");
-        alert(this.currentPlayer)
+       // alert("CalcScore Fn.");
         var playersLns = this.players.length;
         var startingPos = this.currentPlayer;
         var score = 0;
@@ -420,7 +383,7 @@
     }
 
     DominoGame.Domino.prototype.equals = function (left, right) {
-        console.log("Domino Game equals() Function");
+        //console.log("Domino Game equals() Function");
         if (right == null) {
             if (left.orientation() != this.orientation()) {
                 if (this.left() == left.right() && this.right() == left.left())
@@ -436,9 +399,9 @@
         return false;
     }
     DominoGame.Domino.prototype.canMatch = function (left, right) {
-        alert("CanMatch Fn.")
-        alert("StackLeft " + left + " Stackright " + right);
-        alert("card left " + this.left() + " card right" + this.right())
+       // alert("CanMatch Fn.")
+       // alert("StackLeft " + left + " Stackright " + right);
+       // alert("card left " + this.left() + " card right" + this.right())
         l = this.left();
         r = this.right();
         if (l == left) return 1;
@@ -467,7 +430,7 @@
     }
 
     Player.prototype.canPlay = function (left, right) {
-        alert("Player CanPlay() Fn.")
+       // alert("Player CanPlay() Fn.")
         for (i = 0; i < this.cards.length; i++) {
             if (this.cards[i].canMatch(left, right)) {
                 return true;
@@ -495,7 +458,7 @@
     }
 
     Player.prototype.makePlay = function (left, right) { //left means card & right is null
-        alert("makePlay Fn.")
+       // alert("makePlay Fn.")
         var length = this.cards.length;
         for (var i = 0; i < length; i++) {
             if (this.cards[i].equals(left, right)) {
@@ -520,8 +483,8 @@
     }
 
     Player.prototype.countHand = function () { //This function to count the total of cards in hands
-        alert("Count Hand Fn.");
-        alert("Cards Length:" + this.cards.length);
+        //alert("Count Hand Fn.");
+       // alert("Cards Length:" + this.cards.length);
         var count = 0;
         if (this.cards.length == 0) return 0;
         $.each(this.cards, function (i, card) {

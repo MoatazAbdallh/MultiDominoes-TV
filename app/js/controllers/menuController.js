@@ -8,8 +8,10 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
 
         // Get the local Device (SmartTV)
         if ($scope.ms) {
+            //swal("MultiScreen Lib is Loaded")
             Utils.log("MultiScreen Lib is Loaded : ", TAG);
             $scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
+                swal({ title: "Error!", text: "Sorry Can't Retrieve Device "+ error.message, type: "error", confirmButtonText: "Ok" });
                 Utils.log("Device.getCurrent() Error : " + error, TAG);
             });
         }
@@ -74,6 +76,9 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     break;
                 case tvKey.KEY_ENTER:
                 case tvKey.KEY_PANEL_ENTER:
+                    if ($('.sweet-alert').css('display') == 'block')
+                        $('.confirm').trigger('click');
+                    else
                     $scope.keyAction();
                     break;
 

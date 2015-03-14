@@ -56,16 +56,15 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     $rootScope.safeApply($scope);
                 }
                 else if ($scope.leftStackEdge && $scope.side == "head") {
-                    Utils.log("Left Stack 2nd row", TAG);
+                    //Utils.log("Left Stack 2nd row", TAG);
                     $scope.leftStack1 = _.initial($rootScope.DominoGame.playstack, $rootScope.DominoGame.playstack.length - $rootScope.DominoGame.leftStackEdgeIndex - 1);
                     $scope.leftStack1.splice($scope.leftStack1.length - 1, 1);
                     $scope.leftStackRow.push($scope.leftStack1[0]);
                     $rootScope.safeApply($scope);
                 }
                 else if ($scope.rightStackEdge && $scope.side == "tail" && $scope.rightStackRow.length<7) {
-                    Utils.log("Right Stack 2nd row", TAG);
+                   // Utils.log("Right Stack 2nd row", TAG);
                     $scope.rightStackRow = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.rightStackEdgeIndex);
-                   // alert(JSON.stringify($scope.rightStackRow))
                     $rootScope.safeApply($scope);
                 }
                 else if ($scope.rightStackRow && $scope.rightStackRow.length == 7 && $scope.side == "tail" && !$scope.rightSecondRow) { // 2nd right row edge
@@ -77,7 +76,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     $rootScope.safeApply($scope);
                 }
                 else if ($scope.rightStackSecondEdge && $scope.side == "tail") {
-                    Utils.log("Right Stack 3rd row", TAG);
+                   // Utils.log("Right Stack 3rd row", TAG);
                     $scope.rightStackSecondRow = _.rest($rootScope.DominoGame.playstack, $rootScope.DominoGame.rightStackSecondEdgeIndex);
                     $rootScope.safeApply($scope);
                 }
@@ -136,6 +135,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
 
         else if ($scope.data.type == "yPassTurn") {
             $scope.clients[$rootScope.DominoGame.currentPlayer].send(JSON.stringify({ type: "passTurn", flag: false }), true);
+            client.send(JSON.stringify({ type: "cardsuccessed", card: null }), true); // to block on the current player
             $scope.getNextPlayer();
         }
        
@@ -154,10 +154,9 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     }
     //This will maintain the style of Left Stack Edge Card according to previous card
     $scope.StackEdgeStyle = function (type) {
-        Utils.log("Stack Edge Style: " + type, TAG);
+        //Utils.log("Stack Edge Style: " + type, TAG);
         var style = {};
-        
-        
+
         if (type && type == 'left' && $scope.leftStack) {
             var leftwidth = 0;
         $.each($scope.leftStack, function (i, card) {
@@ -202,7 +201,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                 else
                     rightwidth += 73;
             });
-            Utils.log("Right Width: " + rightwidth, TAG)
+           // Utils.log("Right Width: " + rightwidth, TAG)
             if (rightwidth < 1116){
             style["right"] = (rightwidth-18).toString() + 'px';
             $scope.thirdRowRightStack = 1280 - rightwidth + 8;
@@ -337,8 +336,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     }
 
     $scope.playerCardStatus = function (cardstatus) {
-        Utils.log("Player Card Status: "+cardstatus, TAG);
-
+       // Utils.log("Player Card Status: "+cardstatus, TAG);
         switch (cardstatus) {
             case "canPlay":
                 break;
@@ -366,6 +364,9 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                 break;
             case tvKey.KEY_ENTER:
             case tvKey.KEY_PANEL_ENTER:
+                if ($('.sweet-alert').css('display') == 'block')
+                    $('.confirm').trigger('click');
+                
                 break;
 
             case tvKey.KEY_RETURN:

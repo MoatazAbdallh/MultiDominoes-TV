@@ -12,13 +12,13 @@
         var TAG = "Controller - MainController",
 			_THIS = this;
         Main.mainController = _THIS;
-        Utils.log("Intiallized : ", TAG);
+       // Utils.log("Intiallized : ", TAG);
         $scope.channelId = "com.espritsolutions.multidominoes";
         $scope.ms = window.webapis.multiscreen;
         $scope.clients = [];
 
         $scope.destroy = function () {
-            Utils.log("Destroying $rootScope", TAG);
+           // Utils.log("Destroying $rootScope", TAG);
             $scope.clients = [];
             $scope.scoreSheet = [];
             $scope.playersLength = 0;
@@ -32,23 +32,27 @@
         }
 
         $scope.onDeviceRetrieved = function (device) {
-            Utils.log("Success Retrieved Device ", TAG);
+            //swal("Success Retrieved Device")
+            //Utils.log("Success Retrieved Device ", TAG);
             $scope.device = device;
             $scope.connectToChannel();
         }
         $scope.connectToChannel = function () {
-            Utils.log("Open Channel : ", TAG);
+            //Utils.log("Open Channel : ", TAG);
+            //swal("Connect To Channel Function")
             $scope.device.openChannel($scope.channelId, { name: "Host" }, $scope.onConnect, function (error) {
-                Utils.log("device.openChannel() Error : " + error, TAG);
+                swal({ title: "Error!", text: "Can't Open this channel, Try again later", type: "error", confirmButtonText: "Ok" });
+                //Utils.log("device.openChannel() Error : " + error, TAG);
             });
         };
         $scope.onConnect = function (channel) {
             $scope.channel = channel;
-            Utils.log("onConnect: ", TAG);
-
+            //Utils.log("onConnect: ", TAG);
+            //swal("Connected To Channel Function")
             // Wire up some event handlers
             $scope.channel.on("disconnect", function (client) {
-                Utils.log("Channel has been disconnected", TAG);
+                swal({ title: "Error!", text: "Channel has been disconnected", type: "error", confirmButtonText: "Ok" });
+                //Utils.log("Channel has been disconnected", TAG);
             });
 
             $scope.channel.on("clientConnect", function (client) {
@@ -59,7 +63,7 @@
                     player.score = 0;
                     $scope.scoreSheet.push(player);
                     $scope.playersLength++;
-                    Utils.log("players Length: " + $scope.playersLength, TAG);
+                    //Utils.log("players Length: " + $scope.playersLength, TAG);
                     $rootScope.safeApply($scope);
                     $scope.onClientConnect(client);
                     if ($scope.playersLength > 4) //in case we have reached max number of players
@@ -74,7 +78,7 @@
             });
        
             $scope.channel.on("clientDisconnect", function (client) {
-                Utils.log("Client: " + client.attributes.name + " has been disconnected", TAG);
+                //Utils.log("Client: " + client.attributes.name + " has been disconnected", TAG);
                 $scope.channel.broadcast(JSON.stringify({ type: "message", content: client.attributes.name + " has been disconnected" }));
                 $scope.destroy();
                 $state.go('menu');
@@ -95,16 +99,16 @@
 
 
         this.onApplicationOnLoadComplete = function () {
-            Utils.log("***onApplicationOnLoadComplete()***", TAG);
+            //Utils.log("***onApplicationOnLoadComplete()***", TAG);
             $state.go('menu');
         };
 
         this.onApplicationUnload = function () {
-            Utils.log("***onApplicationUnload()***");
+            //Utils.log("***onApplicationUnload()***");
         };
 
         this.handleKeyDown = function (keyCode,event) {
-            Utils.log("handleKeyDown(" + keyCode + ")", TAG);
+           // Utils.log("handleKeyDown(" + keyCode + ")", TAG);
 
             _THIS.currentController = FocusHandlerFactory.getCurrentController();
             if (_THIS.currentController != null) {

@@ -12,11 +12,19 @@
     font-style: normal;
 }
 /* Layout */
-body {
+body,html {
     width: 1280px;
     height: 720px;
+    margin: 0;
+    padding: 0;
+    border: 0;
     font-family: JF Flat Regular;
     color:#fff;
     font-size:16px;
 }
-
+h1,h2,h3,h4,.confirm,p{
+    font-family: JF Flat Regular;
+}
+.confirm{
+    background-color:#136abd !important;
+}
