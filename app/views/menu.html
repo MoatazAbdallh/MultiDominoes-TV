@@ -12,13 +12,16 @@
         <div data-ng-click="keyAction()" class="about" ng-mouseover="highlight(2)"></div>
     </div>
     <div class="keyhelp">
-        <div style="position:relative;right:0px;top:20px;float:right;margin-right:10px;">
-            <span class="enter_ico"></span>
-            <span>Enter</span>
-            <span class="nav_ico"></span>
-            <span>Navigation</span>
-            <span class="exit_ico"></span>
-            <span>Exit</span>
+        <div class="row" style="position:relative;right:0px;direction:rtl;margin-right:10px;">
+            <div class="ico exit_ico" ng-click="exit()"></div>
+            <div class="ico_txt" ng-click="exit()">Exit</div>
+            <div class="ico nav_ico"></div>
+            <div class="ico_txt">Navigation</div>
+            <div class="ico enter_ico" ng-click="keyAction()"></div>
+            <div class="ico_txt" ng-click="keyAction()">Enter</div>
         </div>
     </div>
 </div>
+<audio autoplay loop>
+    <source src="app/sounds/domino-start.mp3" type="audio/mp3" />
+</audio>

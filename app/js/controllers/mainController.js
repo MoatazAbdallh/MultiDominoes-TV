@@ -9,6 +9,7 @@
         //set application's global Main variable's controller to this controller
         $scope.playersLength = 0;
         $scope.scoreSheet = [];
+        $scope.isMute = false;
         var TAG = "Controller - MainController",
 			_THIS = this;
         Main.mainController = _THIS;
@@ -18,6 +19,9 @@
         $scope.clients = [];
         $scope.audios =[];
 
+        $scope.exit = function () {
+            widgetAPI.sendReturnEvent();
+        }
         $scope.destroy = function () {
            // Utils.log("Destroying $rootScope", TAG);
             $scope.clients = [];
@@ -42,7 +46,9 @@
             //Utils.log("Open Channel : ", TAG);
             //swal("Connect To Channel Function")
             $scope.device.openChannel($scope.channelId, { name: "Host" }, $scope.onConnect, function (error) {
-                swal({ title: "Error!", text: "Can't Open this channel, Try again later", type: "error", confirmButtonText: "Ok" });
+                swal({ title: "Network Error!", text: "Can't Open this channel, Try again later", type: "error", confirmButtonText: "Ok" }, function () {
+                    $scope.contentToChannel();
+                });
                 //Utils.log("device.openChannel() Error : " + error, TAG);
             });
         };
@@ -52,7 +58,7 @@
             //swal("Connected To Channel Function")
             // Wire up some event handlers
             $scope.channel.on("disconnect", function (client) {
-                swal({ title: "Error!", text: "Channel has been disconnected", type: "error", confirmButtonText: "Ok" });
+                swal({ title: "Network Error!", text: "Channel has been disconnected", type: "error", confirmButtonText: "Ok" });
                 //Utils.log("Channel has been disconnected", TAG);
             });
 
@@ -102,10 +108,10 @@
         this.onApplicationOnLoadComplete = function () {
             //Utils.log("***onApplicationOnLoadComplete()***", TAG);
             $scope.audios = [
-                ngAudio.load('app/sounds/domino-start.wav'),
-                ngAudio.load('app/sounds/domino-shuffle.wav'),
-                ngAudio.load('app/sounds/domino-stone-on-the-table.wav'),
-                ngAudio.load('app/sounds/winner-dialog.wav')
+                ngAudio.load('app/sounds/domino-start.mp3'),
+                ngAudio.load('app/sounds/domino-shuffle.mp3'),
+                ngAudio.load('app/sounds/domino-stone-on-the-table.mp3'),
+                ngAudio.load('app/sounds/winner-dialog.mp3')
             ];
             $state.go('menu');
         };

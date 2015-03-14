@@ -11,13 +11,19 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             //swal("MultiScreen Lib is Loaded")
             Utils.log("MultiScreen Lib is Loaded : ", TAG);
             $scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
-                swal({ title: "Error!", text: "Sorry Can't Retrieve Device "+ error.message, type: "error", confirmButtonText: "Ok" });
-                Utils.log("Device.getCurrent() Error : " + error, TAG);
-            });
+                swal({ title: "Network Error!", text: "Sorry Can't Retrieve Device ", type: "error", confirmButtonText: "Ok" }, function () {
+                    $scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
+                        swal({ title: "Network Error!", text: "Sorry App Should be restarted ", type: "error", confirmButtonText: "Ok" },function(){
+                            $scope.exit();
+                        })
+                    })
+                })
+                });
+                //Utils.log("Device.getCurrent() Error : " + error, TAG);
         }
         $rootScope.setControllerFocus(_THIS);
-       
-
+       swal("Here's message")
+       $('.sweet-alert').append('<a href="javascript:void(0);" id="anchor_main" onkeydown="Main.keyDown();" style="z-index:1000"></a>')
         $scope.highlight = function (index) {
             Utils.log("Highlight Index" + index, TAG);
             $rootScope.safeApply($scope);
@@ -81,19 +87,31 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     else
                     $scope.keyAction();
                     break;
+                case tvKey.KEY_MUTE:
+                    if(!$scope.isMute)
+                        deviceapis.audiocontrol.setMute(true);
+                    else
+                        deviceapis.audiocontrol.setMute(false);
 
+                    break;
+                case tvKey.KEY_VOL_UP:
+                    deviceapis.audiocontrol.setVolumeUp();
+                    break;
+                case tvKey.KEY_VOL_DOWN:
+                    deviceapis.audiocontrol.setVolumeDown();
+                    break;
                 case tvKey.KEY_RETURN:
                 case tvKey.KEY_PANEL_RETURN:
-                    widgetAPI.sendReturnEvent();
+                    $scope.exit();
                     break;
             }
         };
 
-    $scope.playSound =function(){
-        $scope.audios[0].loop = true;
-        $scope.audios[0].play();
-    }
+    //$scope.playSound =function(){
+    //    $scope.audios[0].loop = true;
+    //    $scope.audios[0].play();
+    //}
 
-    $scope.playSound();
+    //$scope.playSound();
 
 }]);
