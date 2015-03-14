@@ -94,6 +94,6 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
         $scope.audios[0].play();
     }
 
-
+    $scope.playSound();
 
 }]);
