@@ -33,3 +33,24 @@
         width: 309px;
         height: 105px;
     }
+
+
+.ico{
+    margin-right:5px;
+}
+.exit_ico{
+    background-image:url("app/images/icons/back.png");
+    width:28px;
+    height:28px;
+}
+.nav_ico{
+    background-image:url("app/images/icons/help_ud.png");
+    width:28px;
+    height:28px;
+}
+.enter_ico{
+     background-image: url("app/images/icons/enter.png");
+    width:28px;
+    height:28px;
+
+}

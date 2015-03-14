@@ -28,3 +28,12 @@ h1,h2,h3,h4,.confirm,p{
 .confirm{
     background-color:#136abd !important;
 }
+.keyhelp{
+    width:1280px;
+    height:40px;
+    background-color:#ffbd00;
+    position:absolute;
+    top:680px;
+    left:0px;
+    font-weight:bold;
+}

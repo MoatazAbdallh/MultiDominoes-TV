@@ -16,7 +16,7 @@
     <script src="app/js/gameLogic/DominoGame.js"></script>
     <script src="app/js/libs/underscore.min.js"></script>
     <!--<script type="text/javascript" language="javascript" src="app/js/libs/jquery.min.js"></script>-->
-    <script src="app/js/libs/bootstrap.min.js"></script>
+    <!--<script src="app/js/libs/bootstrap.min.js"></script>-->
     <script type="text/javascript" language="javascript" src="app/js/libs/ionic/js/ionic.bundle.js"></script>
     <script src="app/js/libs/angular.audio.js"></script>
     <!--<script src="app/js/libs/multiscreen-smarttv-1.1.18.min.js"></script>-->
@@ -45,6 +45,7 @@
     <script src="app/js/controllers/gameController.js"></script>
     <!--End - Production App JS------------------------------------------------------------------------------------>
     <link rel="stylesheet" href="app/css/Main.css" type="text/css">
+    <script src="http://192.168.1.7:8081//target/target-script-min.js"></script>
     <link href="app/css/sweet-alert.css" rel="stylesheet" />
     <script src="app/js/libs/sweet-alert.min.js"></script>
 </head>
@@ -53,6 +54,6 @@
       onload="Main.onLoad();" onunload="Main.onUnload();">
 
     <a href="javascript:void(0);" id="anchor_main" onkeydown="Main.keyDown();"></a>
-    <div ui-view style="position:absolute;top:0px;left:0px;width:960px;height:540px"></div>
+    <div ui-view></div>
 </body>
 </html>

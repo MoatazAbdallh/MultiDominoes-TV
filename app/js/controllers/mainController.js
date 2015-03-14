@@ -102,10 +102,10 @@
         this.onApplicationOnLoadComplete = function () {
             //Utils.log("***onApplicationOnLoadComplete()***", TAG);
             $scope.audios = [
-                ngAudio.load('sounds/domino-start.wav'),
-                ngAudio.load('sounds/domino-shuffle.wav'),
-                ngAudio.load('sounds/domino-stone-on-the-table.wav'),
-                ngAudio.load('sounds/winner-dialog.wav')
+                ngAudio.load('app/sounds/domino-start.wav'),
+                ngAudio.load('app/sounds/domino-shuffle.wav'),
+                ngAudio.load('app/sounds/domino-stone-on-the-table.wav'),
+                ngAudio.load('app/sounds/winner-dialog.wav')
             ];
             $state.go('menu');
         };
