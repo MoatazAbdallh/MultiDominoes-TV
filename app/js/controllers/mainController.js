@@ -4,7 +4,7 @@
     //receive all keydown events then cleverly select the right child controller to pass
     //the keydown event to
 
-    app.controller('mainController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state) {
+    app.controller('mainController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state','ngAudio', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state,ngAudio) {
 
         //set application's global Main variable's controller to this controller
         $scope.playersLength = 0;
@@ -16,6 +16,7 @@
         $scope.channelId = "com.espritsolutions.multidominoes";
         $scope.ms = window.webapis.multiscreen;
         $scope.clients = [];
+        $scope.audios =[];
 
         $scope.destroy = function () {
            // Utils.log("Destroying $rootScope", TAG);
@@ -100,6 +101,12 @@
 
         this.onApplicationOnLoadComplete = function () {
             //Utils.log("***onApplicationOnLoadComplete()***", TAG);
+            $scope.audios = [
+                ngAudio.load('sounds/domino-start.wav'),
+                ngAudio.load('sounds/domino-shuffle.wav'),
+                ngAudio.load('sounds/domino-stone-on-the-table.wav'),
+                ngAudio.load('sounds/winner-dialog.wav')
+            ];
             $state.go('menu');
         };
 
