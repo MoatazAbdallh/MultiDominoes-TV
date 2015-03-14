@@ -89,5 +89,11 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             }
         };
 
+    $scope.playSound =function(){
+        $scope.audios[0].loop = true;
+        $scope.audios[0].play();
+    }
 
-    }]);
+
+
+}]);
