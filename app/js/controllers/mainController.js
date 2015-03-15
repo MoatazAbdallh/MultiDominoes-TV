@@ -121,7 +121,7 @@
         };
 
         this.handleKeyDown = function (keyCode,event) {
-           // Utils.log("handleKeyDown(" + keyCode + ")", TAG);
+           Utils.log("handleKeyDown(" + keyCode + ")", TAG);
 
             _THIS.currentController = FocusHandlerFactory.getCurrentController();
             if (_THIS.currentController != null) {

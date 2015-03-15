@@ -36,6 +36,7 @@ Main.onUnload = function(){
 Main.keyDown = function()
 {
     var keyCode = event.keyCode;
+    alert("====Pressed Key====="+keyCode)
     if(Main.mainController!==null && Main.mainController!==undefined){
         Main.mainController.handleKeyDown(keyCode,event);
     }else{
