@@ -1,5 +1,5 @@
 ﻿//This Controller will wait until we have minumim no. of players required to start game & then the start button will be appeared.
-app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope','$state','mediaPlayer', function ($scope, FocusHandlerFactory, Utils, $rootScope,$state,mediaPlayer) {
+app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope','$state', function ($scope, FocusHandlerFactory, Utils, $rootScope,$state) {
     var TAG = "Game View";
     var _THIS = this;
     $scope.leftStackPos = 605;

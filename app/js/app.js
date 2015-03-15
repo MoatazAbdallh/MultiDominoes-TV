@@ -4,7 +4,7 @@
  * ---------------------------------------
  */
 var app = angular.module("MultiDominoes", ["ionic",
-                                           
+                                           "mediaPlayer",
                                            ,"app.configuration"
 										,"app.directives"
 									  	,"app.services"
