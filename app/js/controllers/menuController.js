@@ -1,5 +1,5 @@
 ﻿//This Controller will handle 1st player connection then he will be redirected to waiting state, also handle clicking on 3 buttons & go to appreaciated states.
-app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state) {
+app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state','mediaPlayer', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state,mediaPlayer) {
 
         var TAG = "Menu View";
         var _THIS = this;

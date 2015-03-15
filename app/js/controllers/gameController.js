@@ -1,5 +1,5 @@
 ﻿//This Controller will wait until we have minumim no. of players required to start game & then the start button will be appeared.
-app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope','$state', function ($scope, FocusHandlerFactory, Utils, $rootScope,$state) {
+app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope','$state','mediaPlayer', function ($scope, FocusHandlerFactory, Utils, $rootScope,$state,mediaPlayer) {
     var TAG = "Game View";
     var _THIS = this;
     $scope.leftStackPos = 605;
@@ -94,6 +94,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     $rootScope.safeApply($scope);
                 }
                 client.send(JSON.stringify({ type: "cardsuccessed", card: $scope.playedcard }), true);
+                $scope.PlayTableSound();
 
                 //count remaining cards for the player
                 //case no cards or the remaining card and no one can play -> calculate score
@@ -373,7 +374,14 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             case tvKey.KEY_PANEL_RETURN:
                 break;
         }
-    };
+    }
+    $scope.PlayTableSound = function(){
+        $scope.audiostone.play();
+    }
+
+    $scope.PlayShuffleSound = function(){
+        $scope.audioshuffle.play();
+    }
 
 }])
 ;
