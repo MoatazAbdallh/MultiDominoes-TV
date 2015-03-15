@@ -6,7 +6,6 @@ app.controller('rulesController', ['$scope', 'FocusHandlerFactory', 'Utils', '$r
         Utils.log("Intializing", TAG);
         $rootScope.setControllerFocus(_THIS);
         $scope.return = function () {
-            widgetAPI.blockNavigation(event);
             $state.go('menu');
         }
 
@@ -23,7 +22,8 @@ app.controller('rulesController', ['$scope', 'FocusHandlerFactory', 'Utils', '$r
 
                 case tvKey.KEY_RETURN:
                 case tvKey.KEY_PANEL_RETURN:
-                    $scope.return();
+                    widgetAPI.blockNavigation(event);
+                    $scope.return(s);
                     break;
             }
         };

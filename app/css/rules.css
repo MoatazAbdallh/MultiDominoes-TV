@@ -7,14 +7,14 @@
     left: 0px;
 }
 .title{
-    font-size:35px;
+    font-size:30px;
     font-weight:bolder;
     text-align:center;
     color:rgb(240,184,64);
     margin-bottom:1%
 }
 .items{
-    font-size:30px;
+    font-size:25px;
     font-weight:bolder;
     line-height:120%;
     color:rgb(74,135,238);
