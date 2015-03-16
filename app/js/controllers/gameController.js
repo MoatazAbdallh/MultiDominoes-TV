@@ -394,9 +394,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
         $scope.audiostone.play();
     }
 
-    $scope.PlayShuffleSound = function(){
-        $scope.audioshuffle.play();
-    }
+
 
 }])
 ;
