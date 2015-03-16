@@ -2,7 +2,7 @@
 app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state) {
         var TAG = "Waiting View";
         var _THIS = this;
-
+        document.getElementById("anchor_main").focus();
         Utils.log("Intializing", TAG);
         $rootScope.setControllerFocus(_THIS);
 

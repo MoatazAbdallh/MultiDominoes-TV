@@ -41,6 +41,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
               url: '/rules',
               templateUrl: 'app/views/rules.html',
               controller: 'rulesController'
+          }).state('about', {
+              url: '/about',
+              templateUrl: 'app/views/about.html',
+              controller: 'aboutController'
           })
     .state('test', {
         url: '/test',

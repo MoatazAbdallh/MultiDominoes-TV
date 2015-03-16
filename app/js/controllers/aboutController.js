@@ -1,5 +1,5 @@
 ﻿//This Controller will wait until we have minumim no. of players required to start game & then the start button will be appeared.
-app.controller('rulesController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state) {
+app.controller('aboutController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state) {
         var TAG = "Rules View";
         var _THIS = this;
         document.getElementById("anchor_main").focus();
@@ -22,7 +22,6 @@ app.controller('rulesController', ['$scope', 'FocusHandlerFactory', 'Utils', '$r
 
                 case tvKey.KEY_RETURN:
                 case tvKey.KEY_PANEL_RETURN:
-                    alert("Rules Return")
                     widgetAPI.blockNavigation(event);
                     $scope.return();
                     break;
