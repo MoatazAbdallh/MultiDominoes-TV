@@ -45,6 +45,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
               url: '/about',
               templateUrl: 'app/views/about.html',
               controller: 'aboutController'
+          }).state('qr', {
+              url: '/qr',
+              templateUrl: 'app/views/qr.html',
+              controller: 'qrController'
           })
     .state('test', {
         url: '/test',

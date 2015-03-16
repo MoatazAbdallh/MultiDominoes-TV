@@ -21,7 +21,10 @@
         $scope.audios =[];
 
         $scope.exit = function () {
-            widgetAPI.sendReturnEvent();
+
+            $scope.destroy();
+            $state.go('menu')
+           
         }
         $scope.destroy = function () {
            // Utils.log("Destroying $rootScope", TAG);
@@ -113,7 +116,11 @@
             //    ngAudio.load('app/sounds/domino-stone-on-the-table.mp3'),
             //    ngAudio.load('app/sounds/winner-dialog.mp3')
             //];
-            $state.go('menu');
+            setTimeout(function () {
+                $scope.splashFlag = true;
+                $state.go('menu');
+
+            }, 8000)
         };
 
         this.onApplicationUnload = function () {

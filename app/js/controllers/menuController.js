@@ -58,7 +58,7 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             Utils.log("Key Action", TAG);
             switch ($scope.selectedIndex) {
                 case 0:
-                    $state.go('qrcode');
+                    $state.go('qr');
                     break;
                 case 1:
                     $state.go('rules');

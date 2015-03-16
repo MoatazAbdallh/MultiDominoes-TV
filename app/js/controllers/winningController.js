@@ -17,8 +17,10 @@ app.controller('winningController', ['$scope', 'FocusHandlerFactory', 'Utils', '
         $rootScope.continue();
     }
         //in case exit button has been pressed from mobile
-    else if ($scope.data.type == "exitPlay" && $scope.data.flag == true)
-        $rootScope.return();
+     else if ($scope.data.type == "exitPlay" && $scope.data.flag == true) {
+         $scope.exit();
+     }
+        
     });
 
     $rootScope.continue = function () {
@@ -84,7 +86,7 @@ app.controller('winningController', ['$scope', 'FocusHandlerFactory', 'Utils', '
             case tvKey.KEY_RETURN:
             case tvKey.KEY_PANEL_RETURN:
                 widgetAPI.blockNavigation(event);
-                $scope.return();
+                $scope.exit();
                 break;
         }
     };

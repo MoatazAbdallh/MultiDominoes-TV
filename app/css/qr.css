@@ -1,0 +1,8 @@
+﻿#qrView {
+    width: 1280px;
+    height: 720px;
+    background-image: url('../images/Waiting-Back.png');
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}

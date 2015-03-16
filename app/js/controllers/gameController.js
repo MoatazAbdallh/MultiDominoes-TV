@@ -4,6 +4,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     var _THIS = this;
     $scope.leftStackPos = 605;
     Utils.log("Intializing", TAG);
+
     $rootScope.setControllerFocus(_THIS);
 
     $scope.firstPlayer = $rootScope.DominoGame.whichPlayer();
@@ -371,7 +372,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
 
 
     
-    this.handleKeyDown = function (keyCode) {
+    this.handleKeyDown = function (keyCode,event) {
         Utils.log("handleKeyDown(" + keyCode + ")", TAG);
         switch (keyCode) {
             case tvKey.KEY_UP:
@@ -387,6 +388,8 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
 
             case tvKey.KEY_RETURN:
             case tvKey.KEY_PANEL_RETURN:
+                widgetAPI.blockNavigation(event);
+                $scope.exit();
                 break;
         }
     }

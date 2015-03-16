@@ -12,7 +12,7 @@
 	<BigListIcon itemtype="string">icon/default_95.png</BigListIcon>
   <category itemtype="string">lifestyle</category>
   <autoUpdate itemtype="boolean">y</autoUpdate>
-	<ver itemtype="string">1.00</ver>
+	<ver itemtype="string">1.001</ver>
 	<mgrver itemtype="string"></mgrver>
 	<fullwidget itemtype="boolean">y</fullwidget>
 	<type itemtype="string">user</type>

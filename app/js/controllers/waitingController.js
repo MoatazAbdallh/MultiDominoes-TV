@@ -30,7 +30,7 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
             if ($scope.data.type == "startPlay" && $scope.data.flag == true)
                 $rootScope.start();
         });
-        this.handleKeyDown = function (keyCode) {
+        this.handleKeyDown = function (keyCode,event) {
         Utils.log("handleKeyDown(" + keyCode + ")", TAG);
             switch (keyCode) {
                 case tvKey.KEY_UP:
@@ -45,6 +45,8 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
 
                 case tvKey.KEY_RETURN:
                 case tvKey.KEY_PANEL_RETURN:
+                    widgetAPI.blockNavigation(event);
+                    $scope.exit();
                     break;
             }
         };
