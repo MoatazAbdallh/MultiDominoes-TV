@@ -18,10 +18,46 @@
         $scope.channelId = "com.espritsolutions.multidominoes";
         $scope.ms = window.webapis.multiscreen;
         $scope.clients = [];
-        $scope.audios =[];
+
+        $scope.volUp = function () {
+            deviceapis.audiocontrol.setVolumeUp();
+        }
+        $scope.volDown = function () {
+            deviceapis.audiocontrol.setVolumeDown();
+        }
+        $scope.mute = function () {
+            if (!$scope.isMute) {
+                deviceapis.audiocontrol.setMute(true);
+                $scope.isMute = true
+            }
+            else {
+                deviceapis.audiocontrol.setMute(false);
+                $scope.isMute = false;
+            }
+        }
+        $scope.checkConnection=function() {  //this function for checking network Connection
+            var gatewayStatus = 0,
+
+            // Get active connection type - wired or wireless.
+            currentInterface =networkPlugin.GetActiveType();
+
+            // If no active connection.
+            if (currentInterface === -1) 
+                return false;
+
+            // Check Gateway connection of current interface.
+            gatewayStatus = networkPlugin.CheckGateway(currentInterface);
+
+            // If not connected or error.
+            if (gatewayStatus !== 1) 
+                return false;
+
+            // Everything went OK.
+            return true;
+        }
 
         $scope.exit = function () {
-
+            $scope.channel.broadcast(JSON.stringify({ type: "message", content: $scope.clients[0].attributes.name + " has been disconnected" }));
             $scope.destroy();
             $state.go('menu')
            
@@ -42,7 +78,9 @@
 
         $scope.onDeviceRetrieved = function (device) {
             //Utils.log("Success Retrieved Device ", TAG);
+            //$scope.channelError = false;
             $scope.device = device;
+            //$rootScope.safeApply($scope);
             $scope.connectToChannel();
         }
         $scope.connectToChannel = function () {
@@ -110,17 +148,11 @@
 
         this.onApplicationOnLoadComplete = function () {
             //Utils.log("***onApplicationOnLoadComplete()***", TAG);
-            //$scope.audios = [
-            //    ngAudio.load('app/sounds/domino-start.mp3'),
-            //    ngAudio.load('app/sounds/domino-shuffle.mp3'),
-            //    ngAudio.load('app/sounds/domino-stone-on-the-table.mp3'),
-            //    ngAudio.load('app/sounds/winner-dialog.mp3')
-            //];
             setTimeout(function () {
                 $scope.splashFlag = true;
                 $state.go('menu');
 
-            }, 8000)
+            }, 4000)
         };
 
         this.onApplicationUnload = function () {

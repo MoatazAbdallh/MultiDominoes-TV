@@ -1,5 +1,5 @@
 ﻿<link href="app/css/game.css" rel="stylesheet" />
-<div id="gameView" >
+<div id="gameView" onload="playShuffleAudio()" >
     <div class="scoresheet">
         <div class="row">
             <div class="col-25" data-ng-repeat="player in scoreSheet">
@@ -36,9 +36,6 @@
         <img src="app/images/remainingCards.png" />
     </div>
 </div>
-<audio autoplay>
-    <source src="app/sounds/domino-shuffle.mp3" type="audio/mp3" />
-</audio>
-<audio media-player="audiostone">
-    <source src="app/sounds/domino-stone-on-the-table.mp3" type="audio/mp3">
+
+<audio playlist="gamePlaylist" media-player="gameaudio">
 </audio>

@@ -1,6 +1,7 @@
 var widgetAPI = new Common.API.Widget();
 var tvKey = new Common.API.TVKeyValue();
 var pluginAPI = new Common.API.Plugin();
+var networkPlugin 
 
 var Main =
 {
@@ -9,7 +10,8 @@ var Main =
 
 Main.onLoad = function()
 {
-    alert("************************Main.onLoad()*************************");
+    alert("************************Main.onLoad2()*************************");
+    networkPlugin = document.getElementById('pluginObjectNetwork');
     //Send ready event - ready to boostrap app
     widgetAPI.sendReadyEvent();
 

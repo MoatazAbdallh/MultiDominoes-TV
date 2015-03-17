@@ -16,6 +16,7 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
                 $rootScope.DominoGame.players[i].name = client.attributes.name;
                 client.send(JSON.stringify({ type: "cards", cards: $rootScope.DominoGame.players[i].cards }), true);
             });
+            //$scope.audioshuffle.play();
             $state.go('game');
            
         }

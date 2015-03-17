@@ -54,6 +54,11 @@ h1,h2,h3,h4,.confirm,p{
     width:28px;
     height:28px;
 }
+.red_ico{
+    background-image:url("../images/icons/red.png");
+    width:28px;
+    height:28px;
+}
 .enter_ico{
      background-image: url("../images/icons/enter.png");
     width:28px;

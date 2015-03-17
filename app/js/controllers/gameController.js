@@ -4,7 +4,19 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     var _THIS = this;
     $scope.leftStackPos = 605;
     Utils.log("Intializing", TAG);
-
+    $scope.gamePlaylist = [{
+        src: 'app/sounds/domino-shuffle.mp3',
+        type: 'audio/mp3'
+    },
+      {
+          src: 'app/sounds/domino-stone-on-the-table.mp3',
+          type: 'audio/mp3'
+      }];
+    $scope.$on('$viewContentLoaded', function (event) {
+        alert("View has been laoded")
+      
+        $scope.gameaudio.play(0,true);
+    })
     $rootScope.setControllerFocus(_THIS);
 
     $scope.firstPlayer = $rootScope.DominoGame.whichPlayer();
@@ -383,9 +395,16 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             case tvKey.KEY_PANEL_ENTER:
                 if ($('.sweet-alert').css('display') == 'block')
                     $('.confirm').trigger('click');
-                
                 break;
-
+            case tvKey.KEY_MUTE:
+                $scope.mute();
+                break;
+            case tvKey.KEY_VOL_UP:
+                $scope.volUp();
+                break;
+            case tvKey.KEY_VOL_DOWN:
+                $scope.volDown();
+                break;
             case tvKey.KEY_RETURN:
             case tvKey.KEY_PANEL_RETURN:
                 widgetAPI.blockNavigation(event);
@@ -394,7 +413,8 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
         }
     }
     $scope.PlayTableSound = function(){
-        $scope.audiostone.play();
+        $scope.gameaudio.play(1, true);
+
     }
 
 

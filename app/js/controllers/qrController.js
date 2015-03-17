@@ -8,7 +8,16 @@ app.controller('qrController', ['$scope', 'FocusHandlerFactory', 'Utils', '$root
         $scope.return = function () {
             $state.go('menu');
         }
-
+        
+        $.ajax({
+            url: "http://esprit-solutions.com/apps/multidominoes/devices.json",
+            method: "GET",
+            success: function (data) {
+                $scope.ios = JSON.parse(data).ios;
+                $scope.windows = JSON.parse(data).windows;
+                $rootScope.safeApply($scope)
+            }
+        })
         this.handleKeyDown = function (keyCode,event) {
         Utils.log("handleKeyDown(" + keyCode + ")", TAG);
             switch (keyCode) {

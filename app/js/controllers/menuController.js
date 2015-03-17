@@ -6,22 +6,36 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
 
         Utils.log("Intializing", TAG);
 
+        $scope.establishChannel = function () {
+            if ($scope.checkConnection()) //Reserve device if there's connection
+                $scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
+                    swal({ title: "Network Error!", text: "Sorry Can't Establish Channel, Please try again later", type: "error", confirmButtonText: "Exit" }, function () {
+                        widgetAPI.sendReturnEvent();
+                        //$scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
+                        //    swal({ title: "Network Error!", text: "Sorry App Should be restarted ", type: "error", confirmButtonText: "Ok" }, function () {
+                        //        $scope.exit();
+                        //    });
+                        //    document.getElementById("anchor_main").focus();
+                        //})
+                    });
+                    document.getElementById("anchor_main").focus();
+                    //$scope.channelError = true;
+                    //$rootScope.safeApply($scope);
+                });
+
+            else{
+                swal({ title: "Network Error!", text: "Network Interference occurred, Check Network Connection & try again later", type: "error", confirmButtonText: "Exit" },
+                    function () {
+                        widgetAPI.sendReturnEvent();
+                    });
+            document.getElementById("anchor_main").focus();
+            }
+        }
         if (!$rootScope.channelCreationFlag) {
         // Get the local Device (SmartTV)
         if ($scope.ms) {
             Utils.log("MultiScreen Lib is Loaded : ", TAG);
-            $scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
-                swal({ title: "Network Error!", text: "Sorry Can't Retrieve Device ", type: "error", confirmButtonText: "Ok" }, function () {
-                    $scope.ms.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
-                        swal({ title: "Network Error!", text: "Sorry App Should be restarted ", type: "error", confirmButtonText: "Ok" }, function () {
-                            $scope.exit();
-                        });
-                        document.getElementById("anchor_main").focus();
-                    })
-                });
-                document.getElementById("anchor_main").focus();
-                });
-                //Utils.log("Device.getCurrent() Error : " + error, TAG);
+            $scope.establishChannel();
         }
         $rootScope.channelCreationFlag=true
     }
@@ -72,16 +86,20 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             Utils.log("handleKeyDown(" + keyCode + ")");
             switch (keyCode) {
                 case tvKey.KEY_UP:
+                    if ($('.sweet-alert').css('display') != 'block'){
                     $scope.selectedIndex--;
                     if ($scope.selectedIndex < 0)
                         $scope.selectedIndex = 0;
                     $scope.highlight($scope.selectedIndex)
+                    }
                     break;
                 case tvKey.KEY_DOWN:
-                    $scope.selectedIndex++;
-                    if ($scope.selectedIndex > 2)
-                        $scope.selectedIndex = 2;
-                    $scope.highlight($scope.selectedIndex)
+                    if ($('.sweet-alert').css('display') != 'block') {
+                        $scope.selectedIndex++;
+                        if ($scope.selectedIndex > 2)
+                            $scope.selectedIndex = 2;
+                        $scope.highlight($scope.selectedIndex)
+                    }
                     break;
                 case tvKey.KEY_ENTER:
                 case tvKey.KEY_PANEL_ENTER:
@@ -91,17 +109,17 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     $scope.keyAction();
                     break;
                 case tvKey.KEY_MUTE:
-                    if(!$scope.isMute)
-                        deviceapis.audiocontrol.setMute(true);
-                    else
-                        deviceapis.audiocontrol.setMute(false);
-
+                    $scope.mute();
                     break;
                 case tvKey.KEY_VOL_UP:
-                    deviceapis.audiocontrol.setVolumeUp();
+                    $scope.volUp();
                     break;
                 case tvKey.KEY_VOL_DOWN:
-                    deviceapis.audiocontrol.setVolumeDown();
+                    $scope.volDown();
+                    break;
+                case tvKey.KEY_RED:
+                    //if($scope.channelError)
+                    //$scope.establishChannel();
                     break;
                 case tvKey.KEY_RETURN:
                 case tvKey.KEY_PANEL_RETURN:
