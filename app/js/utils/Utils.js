@@ -39,7 +39,7 @@
 						if(useConsoleLogMethod === true){
 							console.log(logMsg);
 						}else{
-							alert(logMsg);
+							console.log(logMsg);
 						}
 					}
 				};

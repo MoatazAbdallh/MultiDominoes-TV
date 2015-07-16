@@ -22,7 +22,7 @@ app.controller('rulesController', ['$scope', 'FocusHandlerFactory', 'Utils', '$r
 
                 case tvKey.KEY_RETURN:
                 case tvKey.KEY_PANEL_RETURN:
-                    alert("Rules Return")
+                    console.log("Rules Return")
                     widgetAPI.blockNavigation(event);
                     $scope.return();
                     break;

@@ -10,7 +10,7 @@ var Main =
 
 Main.onLoad = function()
 {
-    alert("************************Main.onLoad2()*************************");
+    console.log("************************Main.onLoad2()*************************");
     networkPlugin = document.getElementById('pluginObjectNetwork');
     //Send ready event - ready to boostrap app
     widgetAPI.sendReadyEvent();
@@ -18,7 +18,7 @@ Main.onLoad = function()
     //Enable key
     document.getElementById("anchor_main").focus();
 
-    alert("************************Main.onLoad() - COMPLETE *************************");
+    console.log("************************Main.onLoad() - COMPLETE *************************");
     if( Main.mainController!=null
         && Main.mainController.onApplicationOnLoadComplete!=null){
         Main.mainController.onApplicationOnLoadComplete();
@@ -28,7 +28,7 @@ Main.onLoad = function()
 //This process is to active the native volume control
 Main.onUnload = function(){
     //Stop the Player plugin right after the app exit
-    alert("************************Main.onUnload()*************************");
+    console.log("************************Main.onUnload()*************************");
     if( Main.mainController!=null
         && Main.mainController.onApplicationUnload!=null){
         Main.mainController.onApplicationUnload();
@@ -38,10 +38,10 @@ Main.onUnload = function(){
 Main.keyDown = function()
 {
     var keyCode = event.keyCode;
-    alert("====Pressed Key====="+keyCode)
+    console.log("====Pressed Key====="+keyCode)
     if(Main.mainController!==null && Main.mainController!==undefined){
         Main.mainController.handleKeyDown(keyCode,event);
     }else{
-        alert("Main.mainController is NULL");
+        console.log("Main.mainController is NULL");
     }
 };

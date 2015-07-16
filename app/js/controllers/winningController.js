@@ -80,7 +80,7 @@ app.controller('winningController', ['$scope', 'FocusHandlerFactory', 'Utils', '
             case tvKey.KEY_ENTER:
             case tvKey.KEY_PANEL_ENTER:
                 //$scope.keyAction();
-                $rootScope.continue
+                $rootScope.continue();
                 break;
 
             case tvKey.KEY_RETURN:

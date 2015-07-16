@@ -57,7 +57,7 @@
         }
 
         $scope.exit = function () {
-            $scope.channel.broadcast(JSON.stringify({ type: "message", content: $scope.clients[0].attributes.name + " has been disconnected" }));
+            $scope.channel.broadcast(JSON.stringify({ type: "message", content:  "Game has been disconnected, please discover again" }));
             $scope.destroy();
             $state.go('menu')
            
@@ -140,7 +140,8 @@
                 type: "connection",
                 flag: true,
                 message: "" + client.attributes.name + " Connected Successfully",
-                playerslength: $scope.playersLength
+                playerslength: $scope.playersLength,
+                uuid:client.attributes.uuid
             };
             $scope.channel.broadcast(JSON.stringify(msg));
         }

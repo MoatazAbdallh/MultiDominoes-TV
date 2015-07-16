@@ -17,6 +17,10 @@
         <div style="position:absolute" ng-style="stackRowStyle('left')">
             <img data-ng-repeat="card in leftStackRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack1',$index)" />
         </div>
+        <img data-ng-show="leftStackSecondEdge" src="{{'app/images/cards/'+leftStackSecondEdge.r+leftStackSecondEdge.l+'.png'}}" ng-class="EdgeOrientation(leftStackSecondEdge)" style="position:absolute;direction:rtl" ng-style="StackEdgeStyle('left2')">
+        <div style="position:absolute;direction:rtl" ng-style="stackRowStyle('left2')">
+            <img data-ng-repeat="card in leftStackSecondRow" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'leftStack2',$index)" />
+        </div>
         <img class="centerStack" data-ng-show="DominoGame.playstack.length>0" src="{{'app/images/cards/'+DominoGame.playstack[DominoGame.firstCardIndex].right()+DominoGame.playstack[DominoGame.firstCardIndex].left()+'.png'}}" />
         <div class="rightStack">
             <img data-ng-repeat="card in rightStack" src="{{'app/images/cards/'+card.r+card.l+'.png'}}" ng-class="cardOrientation(card,'rightStack',$index)" />

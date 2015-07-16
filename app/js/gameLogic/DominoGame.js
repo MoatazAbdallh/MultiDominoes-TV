@@ -98,7 +98,7 @@
     }
     //internal function: called with .call or .apply
     DominoGame.prototype.nextPlayer = function () {
-        //alert("Choose Next Player Fn.");
+        //console.log("Choose Next Player Fn.");
        // if (this.playstack.length == 0) return this.whichPlayer();
         // var startingPos = this.currentPlayer;
         this.currentPlayer = (this.currentPlayer + 1) % this.playersLength;
@@ -133,12 +133,12 @@
 
     }
     DominoGame.prototype.makePlay = function (player, cardz, side) {
-        //alert("Domino Game makePlay Fn.");
+        //console.log("Domino Game makePlay Fn.");
 
         var card = new DominoGame.Domino(cardz.l, cardz.r);
 
-        //alert("Play Stack Length " + this.playstack.length);
-        //alert("Card Side " + side);
+        //console.log("Play Stack Length " + this.playstack.length);
+        //console.log("Card Side " + side);
 
         // quite confused ,may be the played card isn't the greatest one, why should i add it to the stack before checking???? 
         if (this.playstack.length === 0) {
@@ -159,6 +159,8 @@
                         this.rightStackEdgeIndex++;
                     if (this.rightStackSecondEdgeFlag)
                         this.rightStackSecondEdgeIndex++;
+                    if (this.leftStackSecondEdgeFlag)
+                        this.leftStackSecondEdgeFlag++;
                 }
                 else if (c == card.right()) {
                     card.or = 'r270'
@@ -170,9 +172,11 @@
                         this.rightStackEdgeIndex++;
                     if (this.rightStackSecondEdgeFlag)
                         this.rightStackSecondEdgeIndex++;
+                    if (this.leftStackSecondEdgeFlag)
+                        this.leftStackSecondEdgeIndex++;
                 }
                 else {
-                    alert("False Card");
+                    console.log("False Card");
                     return false;
                 }
             }
@@ -188,7 +192,7 @@
                     this.playstack.push(card);
                 }
                 else {
-                    alert("False Card");
+                    console.log("False Card");
                     return false;
                 }
 
@@ -229,7 +233,7 @@
     }
 
     DominoGame.prototype.getWinner = function () {
-        //alert("get Winner Fn.");
+        //console.log("get Winner Fn.");
         if (this.players[this.currentPlayer].cards.length == 0)
             return this.currentPlayer;
         else { //case el la3ba 2aflet we choose the min player have count hand
@@ -247,7 +251,7 @@
         }
     }
     DominoGame.prototype.calScore = function () {
-       // alert("CalcScore Fn.");
+       // console.log("CalcScore Fn.");
         var playersLns = this.players.length;
         var startingPos = this.currentPlayer;
         var score = 0;
@@ -399,9 +403,9 @@
         return false;
     }
     DominoGame.Domino.prototype.canMatch = function (left, right) {
-       // alert("CanMatch Fn.")
-       // alert("StackLeft " + left + " Stackright " + right);
-       // alert("card left " + this.left() + " card right" + this.right())
+       // console.log("CanMatch Fn.")
+       // console.log("StackLeft " + left + " Stackright " + right);
+       // console.log("card left " + this.left() + " card right" + this.right())
         l = this.left();
         r = this.right();
         if (l == left) return 1;
@@ -430,7 +434,7 @@
     }
 
     Player.prototype.canPlay = function (left, right) {
-       // alert("Player CanPlay() Fn.")
+       // console.log("Player CanPlay() Fn.")
         for (i = 0; i < this.cards.length; i++) {
             if (this.cards[i].canMatch(left, right)) {
                 return true;
@@ -458,13 +462,13 @@
     }
 
     Player.prototype.makePlay = function (left, right) { //left means card & right is null
-       // alert("makePlay Fn.")
+       // console.log("makePlay Fn.")
         var length = this.cards.length;
         for (var i = 0; i < length; i++) {
             if (this.cards[i].equals(left, right)) {
                 this.cards.splice(i, 1);
-                //alert("Player Cards Length " + this.cards.length);
-                //alert("Player Cards: " + JSON.stringify(this.cards))
+                //console.log("Player Cards Length " + this.cards.length);
+                //console.log("Player Cards: " + JSON.stringify(this.cards))
                 //console.log("Player " + this.id + " plays: " + left.left() + " " + left.right());
                 break;
             }
@@ -483,8 +487,8 @@
     }
 
     Player.prototype.countHand = function () { //This function to count the total of cards in hands
-        //alert("Count Hand Fn.");
-       // alert("Cards Length:" + this.cards.length);
+        //console.log("Count Hand Fn.");
+       // console.log("Cards Length:" + this.cards.length);
         var count = 0;
         if (this.cards.length == 0) return 0;
         $.each(this.cards, function (i, card) {
