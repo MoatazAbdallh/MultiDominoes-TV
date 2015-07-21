@@ -30,6 +30,10 @@ app.controller('waitingController', ['$scope', 'FocusHandlerFactory', 'Utils', '
             //In case the start button has been clicked from mobile side
             if ($scope.data.type == "startPlay" && $scope.data.flag == true)
                 $rootScope.start();
+            if ($scope.data.type = "message") {
+                if ($scope.data.content == "Disconnected from game")
+                    $scope.exit();
+            }
         });
         this.handleKeyDown = function (keyCode,event) {
         Utils.log("handleKeyDown(" + keyCode + ")", TAG);

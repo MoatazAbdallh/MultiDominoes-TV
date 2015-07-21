@@ -1,6 +1,6 @@
 ﻿//This Controller will wait until we have minumim no. of players required to start game & then the start button will be appeared.
 app.controller('qrController', ['$scope', 'FocusHandlerFactory', 'Utils', '$rootScope', '$state', function ($scope, FocusHandlerFactory, Utils, $rootScope, $state) {
-        var TAG = "Rules View";
+        var TAG = "QR View";
         var _THIS = this;
         document.getElementById("anchor_main").focus();
         Utils.log("Intializing", TAG);

@@ -14,9 +14,11 @@
         var TAG = "Controller - MainController",
 			_THIS = this;
         Main.mainController = _THIS;
-       // Utils.log("Intiallized : ", TAG);
+        // Utils.log("Intiallized : ", TAG);
         $scope.channelId = "com.espritsolutions.multidominoes";
-        $scope.ms = window.webapis.multiscreen;
+        $scope.dummy = function () {
+            document.getElementById("anchor_main").focus();
+        }
         $scope.clients = [];
 
         $scope.volUp = function () {
@@ -35,21 +37,21 @@
                 $scope.isMute = false;
             }
         }
-        $scope.checkConnection=function() {  //this function for checking network Connection
+        $scope.checkConnection = function () {  //this function for checking network Connection
             var gatewayStatus = 0,
 
             // Get active connection type - wired or wireless.
-            currentInterface =networkPlugin.GetActiveType();
+            currentInterface = networkPlugin.GetActiveType();
 
             // If no active connection.
-            if (currentInterface === -1) 
+            if (currentInterface === -1)
                 return false;
 
             // Check Gateway connection of current interface.
             gatewayStatus = networkPlugin.CheckGateway(currentInterface);
 
             // If not connected or error.
-            if (gatewayStatus !== 1) 
+            if (gatewayStatus !== 1)
                 return false;
 
             // Everything went OK.
@@ -57,13 +59,13 @@
         }
 
         $scope.exit = function () {
-            $scope.channel.broadcast(JSON.stringify({ type: "message", content:  "Game has been disconnected, please discover again" }));
+            $scope.channel.broadcast(JSON.stringify({ type: "message", content: "Game has been disconnected, please discover again" }));
             $scope.destroy();
             $state.go('menu')
-           
+
         }
         $scope.destroy = function () {
-           // Utils.log("Destroying $rootScope", TAG);
+            // Utils.log("Destroying $rootScope", TAG);
             $scope.clients = [];
             $scope.scoreSheet = [];
             $scope.playersLength = 0;
@@ -78,9 +80,7 @@
 
         $scope.onDeviceRetrieved = function (device) {
             //Utils.log("Success Retrieved Device ", TAG);
-            //$scope.channelError = false;
             $scope.device = device;
-            //$rootScope.safeApply($scope);
             $scope.connectToChannel();
         }
         $scope.connectToChannel = function () {
@@ -124,7 +124,7 @@
                 else
                     client.send(JSON.stringify({ type: "message", content: "Sorry Game has been started, you can join in the next session" }), true);
             });
-       
+
             $scope.channel.on("clientDisconnect", function (client) {
                 //Utils.log("Client: " + client.attributes.name + " has been disconnected", TAG);
                 $scope.channel.broadcast(JSON.stringify({ type: "message", content: client.attributes.name + " has been disconnected" }));
@@ -141,7 +141,7 @@
                 flag: true,
                 message: "" + client.attributes.name + " Connected Successfully",
                 playerslength: $scope.playersLength,
-                uuid:client.attributes.uuid
+                uuid: client.attributes.uuid
             };
             $scope.channel.broadcast(JSON.stringify(msg));
         }
@@ -160,12 +160,12 @@
             //Utils.log("***onApplicationUnload()***");
         };
 
-        this.handleKeyDown = function (keyCode,event) {
-           Utils.log("handleKeyDown(" + keyCode + ")", TAG);
+        this.handleKeyDown = function (keyCode, event) {
+            Utils.log("handleKeyDown(" + keyCode + ")", TAG);
 
             _THIS.currentController = FocusHandlerFactory.getCurrentController();
             if (_THIS.currentController != null) {
-                _THIS.currentController.handleKeyDown(keyCode,event);
+                _THIS.currentController.handleKeyDown(keyCode, event);
             }
         };
     }
