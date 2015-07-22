@@ -8,13 +8,23 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     var failureCount = 0;
     function getDeviceInfo() {
         window.webapis.multiscreen.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
-
-            console.log(error);
-            swal({ title: "Network Error!", text: "Sorry Can't Establish Channel, Please try again later", type: "error", confirmButtonText: "Exit" }, function () {
-                widgetAPI.sendReturnEvent();
-            });
+            //console.log(error);
+            failureCount++;
+            if (failureCount > 2) {
+                swal({ title: "Network Error!", text: "Sorry Can't Establish Channel, Please try again later", type: "error", confirmButtonText: "Exit" }, function () {
+                    widgetAPI.sendReturnEvent();
+                });
+            }
+            else {
+                setTimeout(getDeviceInfo, 30000)
+                swal({
+                    title: "Please wait for channel creation", text: "<i class='icon ion-loading-a' style='font-size:50px'></i>",
+                    html: true,
+                    showConfirmButton: false,
+                    timer: 30000
+                });
+            }
             document.getElementById("anchor_main").focus();
-
         });
     }
 

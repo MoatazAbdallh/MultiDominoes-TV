@@ -80,6 +80,7 @@
 
         $scope.onDeviceRetrieved = function (device) {
             //Utils.log("Success Retrieved Device ", TAG);
+            console.log(device)
             $scope.device = device;
             $scope.connectToChannel();
         }
@@ -93,6 +94,7 @@
                 //Utils.log("device.openChannel() Error : " + error, TAG);
             });
         };
+        
         $scope.onConnect = function (channel) {
             $scope.channel = channel;
             //Utils.log("onConnect: ", TAG);
@@ -145,7 +147,6 @@
             };
             $scope.channel.broadcast(JSON.stringify(msg));
         }
-
 
         this.onApplicationOnLoadComplete = function () {
             //Utils.log("***onApplicationOnLoadComplete()***", TAG);
