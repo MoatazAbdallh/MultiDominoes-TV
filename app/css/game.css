@@ -55,12 +55,12 @@
 .remainingcards{
     position:absolute;
     top:550px;
-    right:30px;
+    right:10px;
 }
 .remainingcount{
     position:absolute;
     top:600px;
-    right:40px;
+    right:20px;
     font-size:30px;
     /*border:1px solid;
     -webkit-border-radius:50px;*/

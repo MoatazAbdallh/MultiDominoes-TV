@@ -33,8 +33,8 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     $scope.channel.removeAllListeners("message")
     $scope.channel.on("message", function (msg, client) {
         $scope.data = JSON.parse(msg);
-        if ($scope.data.type = "message") {
-            if($scope.data.content=="Disconnected from game")
+        if ($scope.data.type == "message") {
+            if ($scope.data.content == "Disconnected from game")
                 $scope.exit();
         }
         //In case the message from client is playedcard
@@ -51,7 +51,10 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
             //Utils.log("Player Turn ID " + $scope.idx, TAG);
 
             if (!$rootScope.DominoGame.makePlay($scope.idx, $scope.playedcard, $scope.side)) {
-                client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose another Card!", card: $scope.playedcard }), true);
+                if ($rootScope.DominoGame.firstcard)
+                    client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose Common Card!", card: $scope.playedcard }), true);
+                else
+                    client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose another Card!", card: $scope.playedcard }), true);
             }
 
                 //In case the card sent is valid for ground.
@@ -105,18 +108,14 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     //Second Row
                 else if ($scope.leftStackSecondEdge && $scope.side == "head") {
                     // Utils.log("Right Stack 3rd row", TAG);
-                    console.log($rootScope.DominoGame.leftStackSecondEdgeIndex);
+                    // console.log($rootScope.DominoGame.leftStackSecondEdgeIndex);
                     var temp = _.initial($rootScope.DominoGame.playstack, $rootScope.DominoGame.playstack.length - $rootScope.DominoGame.leftStackSecondEdgeIndex - 1);
-                    console.log(JSON.stringify(temp));
-                    console.log("temp length" + temp.length);
-                    //if (temp.length == 1)
-                    //    $scope.leftStackSecondRow.push(temp);
+                    //console.log(JSON.stringify(temp));
+                    //console.log("temp length" + temp.length);
 
-                    //else {
                     temp.splice(temp.length - 1, 1);
                     $scope.leftStackSecondRow.push(temp[0]);
-                    // }
-                    console.log(JSON.stringify($scope.leftStackSecondRow))
+                    //console.log(JSON.stringify($scope.leftStackSecondRow))
                     $rootScope.safeApply($scope);
                 }
                 else if ($scope.rightStackSecondEdge && $scope.side == "tail") {
@@ -297,9 +296,14 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                 else
                     leftwidth += 73;
             });
-
-            style["left"] = (leftwidth + $scope.secondRowLeftStack).toString() + 'px';
-            $scope.thirdRowLeftStack = 1285 - leftwidth - $scope.secondRowLeftStack;
+            if (leftwidth == 994) {
+                style["left"] = (leftwidth + $scope.secondRowLeftStack - 30).toString() + 'px';
+                $scope.thirdRowLeftStack = 1285 - leftwidth - $scope.secondRowLeftStack-30;
+            }
+            else{
+                style["left"] = (leftwidth + $scope.secondRowLeftStack).toString() + 'px';
+                $scope.thirdRowLeftStack = 1285 - leftwidth - $scope.secondRowLeftStack;
+            }
             style["top"] = '580px';
         }
         return style;

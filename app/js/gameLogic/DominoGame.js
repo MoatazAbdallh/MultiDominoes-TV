@@ -90,8 +90,11 @@
                         return this.currentPlayer;
                     }
                 }
-                if (this.currentPlayer == null)
+                if (this.currentPlayer == null) {
+                    this.firstcard = null;
                     this.currentPlayer = 0;
+
+                }
             }
         }
         return this.currentPlayer;
@@ -142,8 +145,18 @@
 
         // quite confused ,may be the played card isn't the greatest one, why should i add it to the stack before checking???? 
         if (this.playstack.length === 0) {
-            //  if (this.firstcard.equals(card.left(), card.right())) // have to check
-            this.playstack.push(card);
+            console.log("First played Card")
+            if (this.firstcard) {
+                if (this.firstcard.equals(card.left(), card.right())){
+                    this.playstack.push(card);
+                    this.firstcard = null; //reseting
+                }
+                else
+                    return false;
+            }
+            else
+                this.playstack.push(card);
+
         }
         else {
             if (side == "head") {
@@ -198,11 +211,8 @@
 
             }
         }
-
+        console.log("Until Now we are fine")
         this.players[player].makePlay(card);
-
-        //if (this.whoWon() == -1)
-        //  this.chooseNextPlayer();
         return true;
     }
 
