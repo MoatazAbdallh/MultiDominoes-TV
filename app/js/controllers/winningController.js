@@ -11,6 +11,10 @@ app.controller('winningController', ['$scope', 'FocusHandlerFactory', 'Utils', '
     $scope.channel.removeAllListeners("message")
     $scope.channel.on("message", function (msg, client) {
         $scope.data = JSON.parse(msg);
+        if ($scope.data.type == "message") {
+            if ($scope.data.content == "Disconnected from game")
+                $scope.exit();
+        }
         //in case continue button has been pressed from mobile
      if ($scope.data.type == "continuePlay" && $scope.data.flag == true){
         Utils.log("recieved Continue Play form Mobile", TAG);

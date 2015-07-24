@@ -211,7 +211,6 @@
 
             }
         }
-        console.log("Until Now we are fine")
         this.players[player].makePlay(card);
         return true;
     }

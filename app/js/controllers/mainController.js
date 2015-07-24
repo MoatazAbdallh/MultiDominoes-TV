@@ -98,7 +98,6 @@
         $scope.onConnect = function (channel) {
             $scope.channel = channel;
             //Utils.log("onConnect: ", TAG);
-            //swal("Connected To Channel Function")
             // Wire up some event handlers
             $scope.channel.on("disconnect", function (client) {
                 swal({ title: "Network Error!", text: "Channel has been disconnected", type: "error", confirmButtonText: "Ok" });

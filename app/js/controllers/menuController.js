@@ -5,6 +5,9 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     var _THIS = this;
 
     Utils.log("Intializing", TAG);
+    $rootScope.setControllerFocus(_THIS);
+    document.getElementById("anchor_main").focus();
+
     var failureCount = 0;
     function getDeviceInfo() {
         window.webapis.multiscreen.Device.getCurrent($scope.onDeviceRetrieved, function (error) {
@@ -50,7 +53,7 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
         }
         $rootScope.channelCreationFlag = true
     }
-    $rootScope.setControllerFocus(_THIS);
+
 
     $scope.highlight = function (index) {
         Utils.log("Highlight Index" + index, TAG);
@@ -94,7 +97,7 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
         }
     }
     this.handleKeyDown = function (keyCode, event) {
-        Utils.log("handleKeyDown(" + keyCode + ")");
+        Utils.log("handleKeyDown(" + keyCode + ")",TAG);
         switch (keyCode) {
             case tvKey.KEY_UP:
                 if ($('.sweet-alert').css('display') != 'block') {
@@ -134,7 +137,7 @@ app.controller('menuController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                 break;
             case tvKey.KEY_RETURN:
             case tvKey.KEY_PANEL_RETURN:
-                $scope.exit();
+                widgetAPI.sendExitEvent();
                 break;
         }
     };

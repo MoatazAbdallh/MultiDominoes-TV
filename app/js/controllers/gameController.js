@@ -52,7 +52,7 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
 
             if (!$rootScope.DominoGame.makePlay($scope.idx, $scope.playedcard, $scope.side)) {
                 if ($rootScope.DominoGame.firstcard)
-                    client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose Common Card!", card: $scope.playedcard }), true);
+                    client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose highest Common Card!", card: $scope.playedcard }), true);
                 else
                     client.send(JSON.stringify({ type: "cardFailed", content: "Please Choose another Card!", card: $scope.playedcard }), true);
             }
@@ -297,8 +297,8 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
                     leftwidth += 73;
             });
             if (leftwidth == 994) {
-                style["left"] = (leftwidth + $scope.secondRowLeftStack - 30).toString() + 'px';
-                $scope.thirdRowLeftStack = 1285 - leftwidth - $scope.secondRowLeftStack-30;
+                style["left"] = (leftwidth + $scope.secondRowLeftStack - 50).toString() + 'px';
+                $scope.thirdRowLeftStack = 1285 - leftwidth - $scope.secondRowLeftStack-50;
             }
             else{
                 style["left"] = (leftwidth + $scope.secondRowLeftStack).toString() + 'px';
@@ -434,7 +434,6 @@ app.controller('gameController', ['$scope', 'FocusHandlerFactory', 'Utils', '$ro
     }
     $scope.EdgeOrientation = function (card) {
         if (card) {
-            //Utils.log("Left Edge Orientation: " + card.or, TAG)
             if (card.or != "r270") {
                 var or = card.or.slice(0);
                 var finalOr = parseInt(or) + 90;
